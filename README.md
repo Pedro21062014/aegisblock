@@ -5,12 +5,12 @@
 </p>
 
 <p align="center">
-  <b>Bloqueia anúncios, rastreadores e ameaças — no YouTube e em toda a web — com 150.099 URLs de bloqueio, interface em 12 idiomas e estatísticas em tempo real.</b>
+  <b>Bloqueia anúncios, rastreadores e ameaças — no YouTube e em toda a web — com 230.117 URLs de bloqueio, interface em 12 idiomas e estatísticas em tempo real.</b>
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.2.0-2edc96?style=flat-square" />
-  <img alt="urls" src="https://img.shields.io/badge/blocklist-150.099%20URLs-4aa8ff?style=flat-square" />
+  <img alt="version" src="https://img.shields.io/badge/version-1.3.0-2edc96?style=flat-square" />
+  <img alt="urls" src="https://img.shields.io/badge/blocklist-230.117%20URLs-4aa8ff?style=flat-square" />
   <img alt="langs" src="https://img.shields.io/badge/languages-12-8b7cff?style=flat-square" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-ffc857?style=flat-square" />
 </p>
@@ -21,7 +21,7 @@
 
 | Recurso | Descrição |
 |---|---|
-| 🚫 **Bloqueio em 150.099 URLs** | Lista gerada a partir de **739 domínios curados** de redes de anúncios, rastreadores e malvertising (DoubleClick, Criteo, Taboola, AppNexus, Outbrain, etc.) + **35.446 hosts** com variações de subdomínio e caminhos |
+| 🚫 **Bloqueio em 230.117 URLs** | Lista gerada a partir de **789 domínios curados** de redes de anúncios, rastreadores e malvertising (DoubleClick, Criteo, Taboola, AppNexus, Outbrain, etc.) + **47.311 hosts** com variações de subdomínio e caminhos |
 | 🔄 **Atualização automática da lista** | A cada **5 horas** (intervalo configurável: 1h a 48h ou manual), a extensão baixa o arquivo raw do GitHub e aplica as mudanças **sem atualizar a extensão**: URLs novas → bloqueio imediato; URLs removidas → exceção automática (corrige falsos positivos) |
 | ▶️ **Escudo YouTube** | Remove `adPlacements` / `playerAds` das respostas do player **sem bloquear o vídeo** — sem travamentos, sem "ad blocker detected" |
 | 🎯 **Zero falso-positivo** | Apenas domínios de ad-tech são usados como semente; domínios de conteúdo (seu banco, sua loja, seu streaming) nunca entram na lista |
@@ -49,11 +49,11 @@ aegisblock/
 │   ├── youtube_fix.json        # prioridade 100 (YouTube/Google ads)
 │   ├── curated_urls.json       # prioridade 50 (URLs curadas)
 │   ├── bulk_01..06.json        # prioridade 10 (URLs geradas)
-│   └── domains.json            # prioridade 5 (35.446 hosts)
+│   └── domains.json            # prioridade 5 (47.311 hosts)
 ├── popup/                      # UI com animação Lottie + dados reais
 ├── options/                    # painel de configurações + atualização de listas
 ├── data/
-│   ├── blocklist_urls.txt      # as 150.099 URLs (legível)
+│   ├── blocklist_urls.txt      # as 230.117 URLs (legível)
 │   ├── facts.json              # métricas REAIS exibidas na interface
 │   ├── hosts_catalog.json      # host → categoria
 │   └── rule_index.json
@@ -82,7 +82,7 @@ página profissional com animação de segurança, números reais da lista, recu
 
 Animação Lottie de proteção (cadeado) com anéis orbitais · estatísticas **reais**
 (bloqueios medidos, nunca inventados) · donut com a composição real da lista
-(**97.443** anúncios · **37.056** rastreadores · **15.600** ameaças) · contador
+(**188.136** anúncios · **14.681** rastreadores · **27.300** ameaças) · contador
 **por página** · gráfico de 7 dias · status da sincronização remota.
 `preview.html` e `preview-welcome.html` mostram tudo offline, sem instalar.
 
@@ -127,11 +127,11 @@ Contagens em tempo real via `declarativeNetRequest.getMatchedRules`:
 - **Dados economizados** (~350 KB por anúncio evitado)
 - Gráfico dos **últimos 7 dias**
 
-## 🗂️ Lista de bloqueio (150.099 URLs)
+## 🗂️ Lista de bloqueio (230.117 URLs)
 
 Gerada por `tools/generate_blocklist.py` a partir de:
 
-- **739 domínios curados** de ad-tech real (Google Ads/DoubleClick, Criteo, Taboola, Outbrain, PubMatic, Rubicon, AppNexus, AdRoll, Teads, Amazon Ads, Unity Ads, AppLovin, ironSource, Moat, ScorecardResearch, Hotjar, etc.)
+- **789 domínios curados** de ad-tech real (Google Ads/DoubleClick, Criteo, Taboola, Outbrain, PubMatic, Rubicon, AppNexus, AdRoll, Teads, Amazon Ads, Unity Ads, AppLovin, ironSource, Moat, ScorecardResearch, Hotjar, etc.)
 - **47 prefixos de subdomínio** (`ads.`, `track.`, `pixel.`, `sync.`, `rtb.` …)
 - **50 caminhos típicos** de anúncio/rastreamento (`/banner.gif`, `/pixel.gif`, `/vast.xml`, `/tag.js` …)
 - Variações regionais do Google Ads (`adservice.google.*` em ~180 TLDs)

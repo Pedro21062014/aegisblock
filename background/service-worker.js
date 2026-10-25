@@ -215,6 +215,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 const ALL_RULESETS = [
   "youtube_fix", "curated_urls",
   "bulk_01", "bulk_02", "bulk_03", "bulk_04", "bulk_05", "bulk_06",
+  "bulk_07", "bulk_08", "bulk_09", "bulk_10",
   "domains",
 ];
 

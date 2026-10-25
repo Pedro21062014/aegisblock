@@ -343,10 +343,9 @@
       el.id = "wToast";
       el.style.cssText =
         "position:fixed;left:50%;bottom:26px;transform:translate(-50%,26px);" +
-        "background:rgba(16,26,44,0.97);border:1px solid rgba(46,230,168,0.4);" +
-        "color:#eef4ff;padding:12px 20px;border-radius:14px;font-size:12.5px;" +
+        "padding:12px 20px;border-radius:14px;font-size:12.5px;" +
         "font-weight:600;opacity:0;transition:all .28s;z-index:99;" +
-        "box-shadow:0 18px 46px rgba(0,0,0,0.55);font-family:inherit";
+        "font-family:inherit;border:1px solid";
       document.body.appendChild(el);
     }
     el.textContent = msg;
@@ -361,7 +360,57 @@
     }, 2200);
   }
 
+  // ---------------------------------------------------------------- tema
+  function getTheme() {
+    try {
+      const raw = localStorage.getItem("aegis_settings");
+      if (raw) {
+        const s = JSON.parse(raw);
+        return s.theme === "light" ? "light" : "dark";
+      }
+    } catch (e) {}
+    return "dark";
+  }
+  function applyTheme(theme) {
+    document.body.dataset.theme = theme || getTheme();
+  }
+  function syncThemeFromExt() {
+    if (!isExt) return;
+    try {
+      chrome.storage.local.get(["settings"], (data) => {
+        const s = data && data.settings;
+        if (s && s.theme) {
+          applyTheme(s.theme);
+          try {
+            const raw = localStorage.getItem("aegis_settings");
+            const cur = raw ? JSON.parse(raw) : {};
+            cur.theme = s.theme;
+            localStorage.setItem("aegis_settings", JSON.stringify(cur));
+          } catch (e) {}
+        }
+      });
+    } catch (e) {}
+  }
+  function toggleTheme() {
+    let s = {};
+    try {
+      const raw = localStorage.getItem("aegis_settings");
+      if (raw) s = JSON.parse(raw);
+    } catch (e) {}
+    s.theme = getTheme() === "light" ? "dark" : "light";
+    try { localStorage.setItem("aegis_settings", JSON.stringify(s)); } catch (e) {}
+    if (isExt) {
+      try { chrome.runtime.sendMessage({ type: "setSettings", patch: { theme: s.theme } }); } catch (e) {}
+    }
+    applyTheme();
+  }
+
   function boot() {
+    applyTheme();
+    syncThemeFromExt();
+    const themeBtn = document.getElementById("themeBtn");
+    if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
+
     // idioma inicial: do navegador
     const nav = (navigator.languages && navigator.languages[0]) || navigator.language || "pt-BR";
     lang = nav.toLowerCase().startsWith("pt") ? "pt-BR" : "en";

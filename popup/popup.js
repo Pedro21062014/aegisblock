@@ -342,8 +342,8 @@
       FACTS = await resp.json();
     } catch (e) {
       FACTS = {
-        urls: 150099, urlsAds: 97443, urlsTrackers: 37056, urlsMalware: 15600,
-        hosts: 35446, curatedDomains: 739, rules: 150209, languages: 12,
+        urls: 230117, urlsAds: 188136, urlsTrackers: 14681, urlsMalware: 27300,
+        hosts: 47311, curatedDomains: 789, rules: 230266, languages: 12,
       };
     }
     return FACTS;
@@ -497,7 +497,7 @@
     }
 
     // rodapé
-    document.getElementById("verText").textContent = `v1.2.0`;
+    document.getElementById("verText").textContent = `v1.3.0`;
   }
 
   // ------------------------------------------------------------------
@@ -656,9 +656,32 @@
   }
 
   // ------------------------------------------------------------------
+  // Tema (claro/escuro)
+  // ------------------------------------------------------------------
+  function getTheme() {
+    const s = readStorage("settings", {});
+    return s.theme === "light" ? "light" : "dark";
+  }
+  function applyTheme() {
+    document.body.dataset.theme = getTheme();
+  }
+  function toggleTheme() {
+    const s = loadSettings();
+    s.theme = getTheme() === "light" ? "dark" : "light";
+    saveSettings(s);
+    if (isExt) {
+      try { chrome.runtime.sendMessage({ type: "setSettings", patch: { theme: s.theme } }); } catch (e) {}
+    }
+    applyTheme();
+  }
+
+  // ------------------------------------------------------------------
   // Eventos
   // ------------------------------------------------------------------
   function bind() {
+    const themeBtn = document.getElementById("themeBtn");
+    if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
+
     const powerEl = document.getElementById("power");
     powerEl.addEventListener("click", () => {
       const s = loadSettings();
@@ -698,7 +721,7 @@
     });
     document.getElementById("linkAbout").addEventListener("click", (e) => {
       e.preventDefault();
-      alertDemo(`AegisBlock v1.2.0 — ${t("tagline")}`);
+      alertDemo(`AegisBlock v1.3.0 — ${t("tagline")}`);
     });
   }
 
@@ -714,6 +737,7 @@
   // Boot
   // ------------------------------------------------------------------
   async function boot() {
+    applyTheme();
     lang = detectLang();
     const langEl = document.getElementById("lang");
     Object.keys(I18N).forEach((code) => {

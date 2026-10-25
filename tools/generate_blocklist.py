@@ -294,6 +294,75 @@ add("malware",
     "aegaggle?skip", "aerserv.com", "aerserv.net",
 )
 
+
+# --- Expansão v1.3: mais redes reais (SSPs, ad servers, video ads, analytics) ---
+add("ads",
+    "lijit.com", "sovrn.com", "go-lijit.com", "bounceexchange.com", "bouncex.com",
+    "adfox.ru", "ads.adfox.ru", "banners.adfox.ru", "adriver.ru", "ad.adriver.ru",
+    "gnezdo.ru", "adhigh.net", "getintent.com", "fwmrm.net", "adm.fwmrm.net",
+    "streamrail.com", "evadav.com", "richads.com", "exoticads.com",
+    "recreativ.ru", "mobfox.com", "mobilefuse.com", "fusepowered.com",
+    "kiosked.com", "readpeak.com", "sunmedia.tv", "imonomy.com", "coull.com",
+    "stroeerdigitalmedia.de", "smartstream.tv", "bidscube.com", "epom.com",
+    "epommarket.com", "admanmedia.com", "adkernel.com", "serverbid.com",
+    "defydia.com", "simpli.fi", "lijitnetwork.com", "ap.lijit.com",
+    "beeswax.com", "bidtellect.com", "brealtime.com", "bidtheatre.com",
+    "richaudience.com", "smilewanted.com", "liquidm.com", "sojern.com",
+    "adara.io", "zetaglobal.net", "permutive.com", "id5-sync.com",
+    "hybrid.ai", "eyeota.net", "crwdcntrl.net", "navegg.com", "navegg.net",
+    "aerserv.com", "adincube.com", "ogury.io", "pollfish.com",
+    "inner-active.com", "loopme.biz", "smaato.com", "adcolony.net",
+    "applovin.net", "inmobi.net", "vungle.net", "chartboost.net",
+    "tapjoyads.com", "ironsource.net", "supersonicads.com", "fyber.net",
+    "mintegral.net", "appnext.net", "startappservice.com", "digitalturbine.com",
+    "tapcore.net", "pangle.io", "ads1.mopub.com", "adserver.adtech.de",
+    "adspirit.net", "adscale.de", "adsafety.net", "adsafety.org",
+    "sascdn.com", "smartadserver.net", "stickyadstv.com", "vidoomy.com",
+    "aniview.net", "springserve.com", "beachfront.com", "lkqd.net",
+    "tidalwave.video", "spotxcdn.com", "tremorvideo.com", "telaria.com",
+    "connatix.com", "jwpltx.com", "ex.co", "anyclip.com", "vidazoo.com",
+    "nativo.net", "triplelift.com", "sharethrough.net", "yieldmo.com",
+    "33across.com", "contextweb.com", "pulsepoint.com", "districtm.io",
+    "sonobi.com", "undertone.com", "improvedigital.com", "casalemedia.com",
+    "openx.com", "pubmatic.com", "rubiconproject.net", "bidswitch.net",
+    "criteo.net", "adform.com", "adroll.net", "teads.com", "magnite.com",
+    "media.net", "infolinks.com", "yllix.net", "content.ad", "adblade.com",
+    "plista.com", "ligatus.com", "dianomi.com", "revcontent.com",
+    "adskeeper.co.uk", "outbrain.net", "taboolasyndication.com", "mgid.com",
+)
+
+add("trackers",
+    "econda.com", "etracker.com", "webtrekk.com", "webtrekk.net",
+    "contentsquare.net", "clicktale.net", "contentsquare.com",
+    "etracker.de", "matomo.cloud", "piwik.pro", "cint.com",
+    "treasuredata.com", "snowplowanalytics.com", "collector.snplow.net",
+    "mparticle.com", "tealiumiq.com", "everestjs.net", "krxd.net",
+    "bidswitch.net", "rlcdn.com", "id5-sync.net", "adsymptotic.com",
+    "turn.com", "exelator.com", "crwdcntrl.net", "neustar.biz",
+    "demdex.net", "omtrdc.net", "2o7.net", "everesttech.net", "agkn.com",
+    "bluekai.com", "mathtag.com", "zeotap.com", "onaudience.com",
+    "audienceproject.com", "eyeota.net", "addthisedge.com", "quantserve.com",
+    "scorecardresearch.com", "chartbeat.net", "parsely.com", "clicky.com",
+    "getclicky.com", "statcounter.com", "histats.com", "hotjar.io",
+    "fullstory.net", "mouseflow.com", "crazyegg.com", "luckyorange.net",
+    "inspectlet.com", "ptengine.jp", "heapanalytics.net", "amplitude.com",
+    "mixpanel.com", "segment.io", "kissmetrics.io", "piwik.org",
+    "branch.io", "appsflyersdk.com", "adjust.com", "kochava.com",
+    "singular.net", "tenjin.com", "flurry.com", "appmetrica.yandex.ru",
+    "gemius.com", "gemius.pl", "doubleverify.com", "adsafeprotected.com",
+    "moatads.com", "integralads.com", "adlooxtracking.com", "pixalate.net",
+)
+
+add("malware",
+    "adfpoint.com", "poptm.com", "adventurefeeds.com", "adsbridge.com",
+    "voluumtrk.com", "redtrack.io", "binom.org", "mobidea.net",
+    "trafficfactory.biz", "trafficforce.com", "plugrush.net",
+    "adxxx.info", "clicksor.net", "adbetnet.net", "zeropark.net",
+    "voluum.com", "bidvertiser.com", "adk2.co", "adsiduous.com",
+    "popunder.ru", "popunder.net", "popmyads.com", "adserverplus.com",
+    "advertserve.com", "doublepimp.com", "exotracking.com",
+)
+
 # --- Provedores regionais Google Ads (adservice.google.<ccTLD>) -------------
 GOOGLE_TLDS = [
     "com", "com.br", "com.mx", "com.ar", "com.co", "com.pe", "com.ve",
@@ -364,6 +433,10 @@ EXCLUDE = {
     "apmebf.com", "awin1.com", "avantlink.com", "shareasale.com",
     "shareasale.net", "assoc-amazon.com", "impactradius.com",
     "impactradius-go.com", "pepperjam.com", "liveramp.com",
+    # v1.3 — consoles/plataformas funcionais que não devem ser bloqueados
+    "xandr.com", "appnexus.com", "mopub.com", "klaviyo.com", "braze.com",
+    "bazaarvoice.com", "yotpo.com", "posthog.com", "logrocket.com",
+    "bloomreach.com", "trustpilot.com", "adobedtm.com",
 }
 SEEDS = {d: c for d, c in SEEDS.items() if d not in EXCLUDE}
 
@@ -378,10 +451,15 @@ PREFIXES = [
     "video.", "vast.", "pr.", "pub.", "secure.", "securepubads.",
     "engine.", "widgets.", "widget.", "cdn.", "static.", "media.",
     "content.", "delivery.", "srv.", "load.", "go.", "log.", "logs.",
+    "banners.", "ad1.", "ad2.", "adserver2.", "sync2.", "pixel2.",
+    "us.", "eu.", "ads1.", "adimg.", "advideo.", "vast2.", "stats2.",
 ]
 
 PATHS = [
-    "/", "/ad", "/ads/", "/ads/banner", "/banner", "/banner.gif",
+    "/", "/ad", "/ads/", "/ads/banner", "/ads/native", "/banner2.gif",
+    "/pixel.js", "/track.js", "/analytics", "/imp/", "/click/", "/sync/",
+    "/vast/", "/prebid/", "/ad?", "/ads?", "/banner?", "/promo",
+    "/sponsored", "/pop", "/popunder", "/push", "/js/track.js", "/sdk/ads.js", "/banner", "/banner.gif",
     "/banner.jpg", "/pixel", "/pixel.gif", "/pixel.png", "/track",
     "/tracking", "/imp", "/impression", "/click", "/sync", "/tag",
     "/tag.js", "/tags.js", "/adframe", "/adframe.html", "/vast",
@@ -403,11 +481,24 @@ EXACT_URLS = {
         "https://www.youtube.com/api/stats/atr",
         "https://www.youtube.com/_get_ads",
         "https://www.youtube.com/get_video_info?adformat",
+        "https://www.youtube.com/ptracking",
+        "https://www.youtube.com/pagead/interaction",
+        "https://www.youtube.com/pagead/1p-user-list",
+        "https://www.youtube.com/api/stats/ads",
         "https://m.youtube.com/api/stats/ads",
         "https://m.youtube.com/pagead/",
         "https://m.youtube.com/get_midroll_info",
+        "https://m.youtube.com/ptracking",
+        "https://m.youtube.com/api/stats/atr",
+        "https://m.youtube.com/_get_ads",
+        "https://m.youtube.com/pcs/activeview",
         "https://music.youtube.com/api/stats/ads",
-        "https://www.youtube.com/ptracking",
+        "https://music.youtube.com/pagead/",
+        "https://music.youtube.com/get_midroll_info",
+        "https://music.youtube.com/ptracking",
+        "https://music.youtube.com/api/stats/atr",
+        "https://www.youtube-nocookie.com/api/stats/ads",
+        "https://www.youtube-nocookie.com/pagead/",
         "https://www.youtube.com/pagead/interaction",
         "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",
         "https://pagead2.googlesyndication.com/pagead/managed/js/adsense",
@@ -544,10 +635,10 @@ generated = []
 hosts_sorted = sorted(hosts_cat.items(), key=lambda kv: (kv[1], kv[0]))
 
 # Distribui ~5 caminhos por host até passar de 150.000
-TARGET = 150000
+TARGET = 230000
 count = 0
 path_cursor = 0
-per_host = 5
+per_host = 7
 for host, cat in hosts_sorted:
     paths = AD_PATHS if cat != "trackers" else TRACKER_PATHS
     for i in range(per_host):

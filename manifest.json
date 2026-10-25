@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "description": "__MSG_extDesc__",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "default_locale": "en",
   "icons": {
     "16": "assets/icons/icon16.png",
@@ -45,6 +45,10 @@
       { "id": "bulk_04", "enabled": true, "path": "rules/bulk_04.json" },
       { "id": "bulk_05", "enabled": true, "path": "rules/bulk_05.json" },
       { "id": "bulk_06", "enabled": true, "path": "rules/bulk_06.json" },
+      { "id": "bulk_07", "enabled": true, "path": "rules/bulk_07.json" },
+      { "id": "bulk_08", "enabled": true, "path": "rules/bulk_08.json" },
+      { "id": "bulk_09", "enabled": true, "path": "rules/bulk_09.json" },
+      { "id": "bulk_10", "enabled": true, "path": "rules/bulk_10.json" },
       { "id": "domains", "enabled": true, "path": "rules/domains.json" }
     ]
   },

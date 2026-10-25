@@ -275,6 +275,14 @@
       .catch(() => {});
   }
 
+  // ---------------------------------------------------------- tema
+  function applyTheme() {
+    const s = loadSettings();
+    document.body.dataset.theme = s.theme === "light" ? "light" : "dark";
+    const sel = $("t-theme");
+    if (sel) sel.value = s.theme === "light" ? "light" : "dark";
+  }
+
   // ---------------------------------------------------------- boot
   function boot() {
     ["t-enabled:enabled", "t-blockAds:blockAds", "t-blockTrackers:blockTrackers",
@@ -288,6 +296,7 @@
 
     initLangSelect();
     bindUpdateControls();
+    applyTheme();
     paintBanner();
     renderStats();
     renderWhitelist();
@@ -300,6 +309,15 @@
       if (isExt) chrome.runtime.sendMessage({ type: "resetStats" });
       renderStats();
       toast("Estatísticas zeradas");
+    });
+
+    $("t-theme").addEventListener("change", () => {
+      const st = loadSettings();
+      st.theme = $("t-theme").value === "light" ? "light" : "dark";
+      write("settings", st);
+      if (isExt) chrome.runtime.sendMessage({ type: "setSettings", patch: { theme: st.theme } });
+      applyTheme();
+      toast(st.theme === "light" ? "Tema claro ativado ☀️" : "Tema escuro ativado 🌙");
     });
 
     if (isExt) {

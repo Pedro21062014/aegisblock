@@ -160,7 +160,7 @@
       });
     } catch (e) {}
     // reforço periódico leve (SPA / navegação do YouTube)
-    setInterval(sweep, 6000);
+    setInterval(sweep, 10000);
   }
 
   if (document.documentElement) boot();
