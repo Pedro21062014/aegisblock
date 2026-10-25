@@ -1,0 +1,51 @@
+{
+  "ranges": [
+    {
+      "from": 1,
+      "to": 999,
+      "category": "ads"
+    },
+    {
+      "from": 1000,
+      "to": 9999,
+      "category": "ads"
+    },
+    {
+      "from": 10000,
+      "to": 199999,
+      "category": "ads"
+    },
+    {
+      "from": 200000,
+      "to": 299999,
+      "category": "trackers"
+    },
+    {
+      "from": 300000,
+      "to": 399999,
+      "category": "malware"
+    },
+    {
+      "from": 500000,
+      "to": 509999,
+      "category": "ads"
+    },
+    {
+      "from": 510000,
+      "to": 519999,
+      "category": "trackers"
+    },
+    {
+      "from": 520000,
+      "to": 529999,
+      "category": "malware"
+    }
+  ],
+  "counts": {
+    "urls": 150099,
+    "hosts": 35446,
+    "curated_domains": 739,
+    "url_rules": 150137,
+    "domain_rules": 72
+  }
+}

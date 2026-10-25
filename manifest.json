@@ -1,0 +1,85 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDesc__",
+  "version": "1.0.0",
+  "default_locale": "en",
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png"
+    },
+    "default_title": "__MSG_extName__"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "declarative_net_request": {
+    "rule_resources": [
+      { "id": "youtube_fix", "enabled": true, "path": "rules/youtube_fix.json" },
+      { "id": "curated_urls", "enabled": true, "path": "rules/curated_urls.json" },
+      { "id": "bulk_01", "enabled": true, "path": "rules/bulk_01.json" },
+      { "id": "bulk_02", "enabled": true, "path": "rules/bulk_02.json" },
+      { "id": "bulk_03", "enabled": true, "path": "rules/bulk_03.json" },
+      { "id": "bulk_04", "enabled": true, "path": "rules/bulk_04.json" },
+      { "id": "bulk_05", "enabled": true, "path": "rules/bulk_05.json" },
+      { "id": "bulk_06", "enabled": true, "path": "rules/bulk_06.json" },
+      { "id": "domains", "enabled": true, "path": "rules/domains.json" }
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/cosmetic.js"],
+      "css": ["content/hide.css"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    },
+    {
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://m.youtube.com/*",
+        "*://music.youtube.com/*",
+        "*://www.youtube-nocookie.com/*"
+      ],
+      "js": ["content/main-world.js"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content/inject.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "aegisblock@example.com",
+      "strict_min_version": "113.0"
+    }
+  }
+}
