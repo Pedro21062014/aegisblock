@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.0.0-2edc96?style=flat-square" />
+  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-2edc96?style=flat-square" />
   <img alt="urls" src="https://img.shields.io/badge/blocklist-150.099%20URLs-4aa8ff?style=flat-square" />
   <img alt="langs" src="https://img.shields.io/badge/languages-12-8b7cff?style=flat-square" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-ffc857?style=flat-square" />
@@ -22,13 +22,14 @@
 | Recurso | Descrição |
 |---|---|
 | 🚫 **Bloqueio em 150.099 URLs** | Lista gerada a partir de **739 domínios curados** de redes de anúncios, rastreadores e malvertising (DoubleClick, Criteo, Taboola, AppNexus, Outbrain, etc.) + **35.446 hosts** com variações de subdomínio e caminhos |
+| 🔄 **Atualização automática da lista** | A cada **5 horas** (intervalo configurável: 1h a 48h ou manual), a extensão baixa o arquivo raw do GitHub e aplica as mudanças **sem atualizar a extensão**: URLs novas → bloqueio imediato; URLs removidas → exceção automática (corrige falsos positivos) |
 | ▶️ **Escudo YouTube** | Remove `adPlacements` / `playerAds` das respostas do player **sem bloquear o vídeo** — sem travamentos, sem "ad blocker detected" |
 | 🎯 **Zero falso-positivo** | Apenas domínios de ad-tech são usados como semente; domínios de conteúdo (seu banco, sua loja, seu streaming) nunca entram na lista |
 | 🫥 **Modo discreto** | Content scripts sem globais óbvios, sem marcas de extensão expostas à página |
 | 🌍 **12 idiomas** | Português (BR), Inglês, Espanhol, Francês, Alemão, Italiano, Japonês, Chinês, Russo, Coreano, Árabe e Hindi |
 | 📊 **Estatísticas ao vivo** | Anúncios, rastreadores e ameaças bloqueadas + elementos ocultos + tempo e dados economizados + gráfico de 7 dias |
-| 🔐 **Animação de segurança** | Interface com animação Lottie de proteção segura (cadeado) |
-| ⚙️ **Configurações granulares** | Liga/desliga por categoria, whitelist por site, escudo YouTube, modo discreto |
+| 🔐 **Animação de segurança** | Interface profissional com animação Lottie de proteção segura (cadeado) no popup e nas configurações |
+| ⚙️ **Configurações granulares** | Liga/desliga por categoria, whitelist por site, escudo YouTube, modo discreto, intervalo de atualização |
 
 ## 🧱 Arquitetura (Manifest V3)
 
@@ -37,6 +38,7 @@ aegisblock/
 ├── manifest.json               # MV3 + declarativeNetRequest
 ├── background/
 │   ├── service-worker.js       # estatísticas (getMatchedRules) + badge
+│   ├── list-updater.js         # atualização automática via arquivo raw
 │   └── rule-map.js             # IDs de regras → categorias
 ├── content/
 │   ├── main-world.js           # escudo YouTube (mundo MAIN)
@@ -79,6 +81,27 @@ A animação de segurança (cadeado Lottie) é exibida no popup e na página de 
 3. Remove somente os campos publicitários (`adPlacements`, `playerAds`, `adSlots`, `adBreakHeartbeatParams`)
 4. **Nunca** bloqueia requisições de mídia do `googlevideo.com` — o vídeo toca normalmente
 5. Pula automaticamente anúncios que escaparem e oculta overlays
+
+## 🔄 Atualização automática da lista (sem reinstalar a extensão)
+
+A extensão sincroniza a lista de bloqueio com o arquivo raw do repositório:
+
+```
+https://raw.githubusercontent.com/Pedro21062014/aegisblock/main/data/blocklist_urls.txt
+```
+
+**Como funciona:**
+
+1. A cada intervalo (padrão **5 horas**, configurável em *Configurações → Atualização de listas*: 1h, 3h, 5h, 12h, 24h, 48h ou manual), a extensão baixa o arquivo raw
+2. Compara com a lista embutida na versão instalada
+3. **URLs novas** no arquivo remoto → viram regras de bloqueio dinâmicas na hora
+4. **URLs removidas** do arquivo remoto → viram regras de exceção (`allow`), corrigindo falsos positivos imediatamente
+5. Nenhuma atualização/reinstalação da extensão é necessária — os usuários sempre têm a lista mais recente
+
+**Para publicar atualizações da lista** (mantenedores): edite `data/blocklist_urls.txt`
+(com `python3 tools/generate_blocklist.py`) e faça `git push` — em até 5 horas todos os
+usuários recebem a mudança. Também é possível usar um *fork* ou URL próprio
+(campo "Fonte da lista" nas configurações).
 
 ## 📈 Estatísticas
 

@@ -4,6 +4,12 @@
  * mantém contadores globais e por categoria e atualiza o badge do ícone.
  */
 import { categoryForRuleId } from "./rule-map.js";
+import {
+  applyUpdatePolicy,
+  runListUpdate,
+  getListStatus,
+  onListAlarm,
+} from "./list-updater.js";
 
 const DEFAULT_STATS = {
   ads: 0,
@@ -87,7 +93,9 @@ async function pollMatchedRules() {
       const key = `${info.ruleId}|${info.tabId}|${info.timeStamp}`;
       if (seenKeys.has(key)) continue;
       seenKeys.add(key);
-      bump(stats, categoryForRuleId(info.ruleId));
+      const cat = categoryForRuleId(info.ruleId);
+      if (cat === "allow") continue; // regras de correção não contam
+      bump(stats, cat);
       changed = true;
     }
     // evita crescimento infinito do conjunto de dedupe
@@ -138,6 +146,13 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           enableRulesetIds: ALL_RULESETS,
         });
       }
+      // reconfigura a atualização automática da lista, se mexeram nela
+      if (
+        msg.patch &&
+        ("autoUpdate" in msg.patch || "intervalHours" in msg.patch || "sourceUrl" in msg.patch)
+      ) {
+        await applyUpdatePolicy();
+      }
       sendResponse({ ok: true, settings: next });
     } else if (msg.type === "cosmeticCount") {
       const { stats } = await getState();
@@ -152,6 +167,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       stats.sessions += 1;
       await saveStats(stats);
       sendResponse({ ok: true });
+    } else if (msg.type === "getListStatus") {
+      const st = await getListStatus();
+      sendResponse({ ok: true, status: st });
+    } else if (msg.type === "listUpdateNow") {
+      const st = await runListUpdate(true);
+      sendResponse({ ok: true, status: st });
     }
   })();
   return true; // resposta assíncrona
@@ -175,6 +196,8 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details && details.reason === "install") {
     await chrome.tabs.create({ url: "https://aegisblock.app/welcome" }).catch(() => {});
   }
+  // agenda a atualização automática da lista (padrão: a cada 5 h)
+  await applyUpdatePolicy();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
@@ -183,11 +206,14 @@ chrome.runtime.onStartup.addListener(async () => {
       displayActionCountAsBadgeText: true,
     });
   } catch (e) {}
+  // verifica se a atualização está atrasada
+  await applyUpdatePolicy();
 });
 
 chrome.alarms.create("aegis-poll", { periodInMinutes: 0.25 });
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "aegis-poll") pollMatchedRules();
+  else if (alarm.name === "aegis-list-update") onListAlarm();
 });
 
 // badge reativo por aba

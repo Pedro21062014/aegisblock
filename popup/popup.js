@@ -223,18 +223,18 @@
 
   // chaves complementares por idioma
   const EXTRA = {
-    "en": { since: "since activation", headlineOn: "Ad Shield Active", headlineOff: "Shield Disabled" },
-    "pt-BR": { since: "desde a ativação", headlineOn: "Escudo Anti-Anúncios Ativo", headlineOff: "Escudo Desativado" },
-    "es": { since: "desde la activación", headlineOn: "Escudo Anti-Anuncios Activo", headlineOff: "Escudo Desactivado" },
-    "fr": { since: "depuis l'activation", headlineOn: "Bouclier Anti-Pubs Actif", headlineOff: "Bouclier Désactivé" },
-    "de": { since: "seit Aktivierung", headlineOn: "Werbeschutz Aktiv", headlineOff: "Schutz Deaktiviert" },
-    "it": { since: "dall'attivazione", headlineOn: "Scudo Anti-Pubblicità Attivo", headlineOff: "Scudo Disattivato" },
-    "ja": { since: "有効化以降", headlineOn: "広告ブロック有効", headlineOff: "シールド無効" },
-    "zh-CN": { since: "自启用以来", headlineOn: "广告防护已启用", headlineOff: "防护已关闭" },
-    "ru": { since: "с момента включения", headlineOn: "Защита от рекламы активна", headlineOff: "Защита отключена" },
-    "ko": { since: "활성화 이후", headlineOn: "광고 차단 활성화됨", headlineOff: "실드 비활성화됨" },
-    "ar": { since: "منذ التفعيل", headlineOn: "درع الإعلانات نشط", headlineOff: "الدرع معطل" },
-    "hi": { since: "सक्रियण के बाद से", headlineOn: "विज्ञापन शील्ड सक्रिय", headlineOff: "शील्ड अक्षम" },
+    "en": { since: "since activation", headlineOn: "Ad Shield Active", headlineOff: "Shield Disabled", totalBlocked: "Total blocked", list: "Blocklist", ago: "{x} ago", waiting: "waiting for first sync" },
+    "pt-BR": { since: "desde a ativação", headlineOn: "Escudo Anti-Anúncios Ativo", headlineOff: "Escudo Desativado", totalBlocked: "Total bloqueado", list: "Lista de bloqueio", ago: "há {x}", waiting: "aguardando 1ª atualização" },
+    "es": { since: "desde la activación", headlineOn: "Escudo Anti-Anuncios Activo", headlineOff: "Escudo Desactivado", totalBlocked: "Total bloqueado", list: "Lista de bloqueo", ago: "hace {x}", waiting: "esperando la 1ª actualización" },
+    "fr": { since: "depuis l'activation", headlineOn: "Bouclier Anti-Pubs Actif", headlineOff: "Bouclier Désactivé", totalBlocked: "Total bloqué", list: "Liste de blocage", ago: "il y a {x}", waiting: "en attente de la 1re synchro" },
+    "de": { since: "seit Aktivierung", headlineOn: "Werbeschutz Aktiv", headlineOff: "Schutz Deaktiviert", totalBlocked: "Gesamt blockiert", list: "Blockliste", ago: "vor {x}", waiting: "warte auf erste Aktualisierung" },
+    "it": { since: "dall'attivazione", headlineOn: "Scudo Anti-Pubblicità Attivo", headlineOff: "Scudo Disattivato", totalBlocked: "Totale bloccato", list: "Lista di blocco", ago: "{x} fa", waiting: "in attesa del 1° aggiornamento" },
+    "ja": { since: "有効化以降", headlineOn: "広告ブロック有効", headlineOff: "シールド無効", totalBlocked: "合計ブロック", list: "ブロックリスト", ago: "{x}前", waiting: "初回同期待ち" },
+    "zh-CN": { since: "自启用以来", headlineOn: "广告防护已启用", headlineOff: "防护已关闭", totalBlocked: "总拦截", list: "拦截列表", ago: "{x}前", waiting: "等待首次同步" },
+    "ru": { since: "с момента включения", headlineOn: "Защита от рекламы активна", headlineOff: "Защита отключена", totalBlocked: "Всего заблокировано", list: "Список блокировки", ago: "{x} назад", waiting: "ожидание первой синхронизации" },
+    "ko": { since: "활성화 이후", headlineOn: "광고 차단 활성화됨", headlineOff: "실드 비활성화됨", totalBlocked: "총 차단", list: "차단 목록", ago: "{x} 전", waiting: "첫 동기화 대기 중" },
+    "ar": { since: "منذ التفعيل", headlineOn: "درع الإعلانات نشط", headlineOff: "الدرع معطل", totalBlocked: "إجمالي المحظور", list: "قائمة الحظر", ago: "منذ {x}", waiting: "في انتظار أول مزامنة" },
+    "hi": { since: "सक्रियण के बाद से", headlineOn: "विज्ञापन शील्ड सक्रिय", headlineOff: "शील्ड अक्षम", totalBlocked: "कुल अवरुद्ध", list: "ब्लॉक सूची", ago: "{x} पहले", waiting: "पहली सिंक की प्रतीक्षा" },
   };
   for (const code of Object.keys(EXTRA)) {
     if (I18N[code]) Object.assign(I18N[code], EXTRA[code]);
@@ -377,6 +377,16 @@
     document.getElementById("statTrack").textContent = fmt(stats.trackers || 0);
     document.getElementById("statMal").textContent = fmt(stats.malware || 0);
     document.getElementById("statCos").textContent = fmt(stats.cosmetics || 0);
+    const grandTotal = (stats.ads || 0) + (stats.trackers || 0) + (stats.malware || 0) + (stats.cosmetics || 0);
+    document.getElementById("totalN").textContent = fmt(grandTotal);
+    // barras de proporção
+    const maxVal = Math.max(1, stats.ads || 0, stats.trackers || 0, stats.malware || 0, stats.cosmetics || 0);
+    document.getElementById("barAds").style.width = `${Math.max(4, ((stats.ads || 0) / maxVal) * 100)}%`;
+    document.getElementById("barTrk").style.width = `${Math.max(4, ((stats.trackers || 0) / maxVal) * 100)}%`;
+    document.getElementById("barMal").style.width = `${Math.max(4, ((stats.malware || 0) / maxVal) * 100)}%`;
+    document.getElementById("barCos").style.width = `${Math.max(4, ((stats.cosmetics || 0) / maxVal) * 100)}%`;
+    const powerLabel = document.getElementById("powerLabel");
+    if (powerLabel) powerLabel.textContent = enabled ? "ON" : "OFF";
 
     const seconds = (stats.ads || 0) * AVG_AD_SECONDS;
     const bytes = (stats.ads || 0) * AVG_AD_BYTES;
@@ -455,9 +465,71 @@
     }
 
     // rodapé
-    document.getElementById("verText").textContent = `${t("version")}1.0.0`;
-    document.getElementById("urlsText").textContent = `150.099 ${t("urls")}`;
-    document.getElementById("aboutTitle").textContent = t("about");
+    document.getElementById("verText").textContent = `v1.1.0`;
+    const urlsBadge = document.getElementById("urlsBadge");
+    if (urlsBadge) urlsBadge.textContent = "150.099";
+  }
+
+  function fmtAgo(ts) {
+    if (!ts) return null;
+    const diff = Math.max(0, Date.now() - ts);
+    const mins = Math.round(diff / 60000);
+    if (mins < 1) return "1min";
+    if (mins < 60) return `${mins}min`;
+    const h = Math.round(mins / 60);
+    if (h < 48) return `${h}h`;
+    return `${Math.round(h / 24)}d`;
+  }
+
+  function renderListStatus(st) {
+    const meta = document.getElementById("listMeta");
+    const pill = document.getElementById("listPill");
+    const sync = document.getElementById("listSync");
+    if (!meta || !pill) return;
+    if (!st) {
+      meta.innerHTML = `<b>150.099</b> URLs · ${t("waiting")}`;
+      return;
+    }
+    sync.classList.toggle("spinning", !!st.updating);
+    const total = st.remoteCount || 150099;
+    const ago = fmtAgo(st.lastSuccess);
+    if (st.updating) {
+      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("waiting")}`;
+      pill.textContent = "···";
+      pill.classList.remove("off");
+      return;
+    }
+    const interval = st.autoUpdate === false ? null : (st.intervalHours || 5);
+    if (ago) {
+      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("ago").replace("{x}", ago)}`;
+    } else {
+      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("waiting")}`;
+    }
+    if (interval) {
+      pill.textContent = `${interval}h`;
+      pill.classList.remove("off");
+    } else {
+      pill.textContent = "OFF";
+      pill.classList.add("off");
+    }
+    if (st.addedCount) {
+      meta.innerHTML += ` · +${fmt(st.addedCount)}`;
+    }
+  }
+
+  function loadListStatus() {
+    if (!isExt) {
+      renderListStatus({ remoteCount: 150099, lastSuccess: Date.now() - 2 * 3600000, autoUpdate: true, intervalHours: 5, addedCount: 128 });
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage({ type: "getListStatus" }, (res) => {
+        if (res && res.status) renderListStatus(res.status);
+        else renderListStatus(null);
+      });
+    } catch (e) {
+      renderListStatus(null);
+    }
   }
 
   function paintSite(domain, settings, siteD, siteS, siteBtn) {
@@ -585,6 +657,7 @@
     bind();
     render();
     loadLottie();
+    loadListStatus();
     // atualização ao vivo das estatísticas
     if (isExt) {
       setInterval(() => {

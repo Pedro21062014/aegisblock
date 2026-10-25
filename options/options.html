@@ -6,132 +6,259 @@
   <title>AegisBlock — Configurações</title>
   <style>
     :root {
-      --bg: #0b1220; --bg2: #0f1a2e; --card: rgba(255,255,255,0.045);
-      --card-bd: rgba(255,255,255,0.08); --txt: #eaf2ff; --txt2: #93a4c3;
-      --txt3: #5d7196; --acc: #2edc96; --danger: #ff5c6c; --warn: #ffc857;
-      --violet: #8b7cff; --blue: #4aa8ff; --radius: 16px;
+      --bg-0: #060b14; --bg-1: #0a1220;
+      --card: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+      --card-2: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.015));
+      --bd: rgba(255,255,255,0.085); --bd-2: rgba(255,255,255,0.055);
+      --txt: #eef4ff; --txt-2: #96a7c6; --txt-3: #5c6f93;
+      --acc: #2ee6a8; --acc-deep: #17b985; --cyan: #3ed4f6;
+      --violet: #8d7df8; --rose: #ff6b7d; --amber: #ffc95c;
+      --r-lg: 20px; --r-md: 15px; --r-sm: 11px;
+      --shadow: 0 18px 44px rgba(2,6,16,0.5);
+      --font: "Inter", "SF Pro Display", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       min-height: 100vh;
-      background:
-        radial-gradient(900px 420px at 90% -10%, rgba(46,220,150,0.13), transparent 60%),
-        radial-gradient(800px 400px at -10% 110%, rgba(74,168,255,0.11), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+      font-family: var(--font);
       color: var(--txt);
-      font-family: "Segoe UI", "Inter", "Roboto", -apple-system, sans-serif;
-      padding: 32px 18px 60px;
       -webkit-font-smoothing: antialiased;
+      background:
+        radial-gradient(900px 420px at 90% -10%, rgba(46,230,168,0.12), transparent 60%),
+        radial-gradient(800px 420px at -10% 110%, rgba(62,212,246,0.1), transparent 60%),
+        linear-gradient(178deg, var(--bg-1), var(--bg-0) 55%);
+      padding: 36px 20px 70px;
     }
-    .wrap { max-width: 720px; margin: 0 auto; }
-    header { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+    .wrap { max-width: 860px; margin: 0 auto; }
+
+    /* topo */
+    header { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
     .logo {
-      width: 52px; height: 52px; border-radius: 16px; flex: none;
-      background: linear-gradient(145deg, #123c2f, #0d2b33);
+      width: 56px; height: 56px; border-radius: 17px; flex: none;
+      background: linear-gradient(150deg, #0f3d31, #0b2033 70%);
       display: grid; place-items: center;
-      box-shadow: inset 0 0 0 1px rgba(46,220,150,0.35), 0 10px 26px rgba(0,0,0,0.4);
+      box-shadow: inset 0 0 0 1px rgba(46,230,168,0.38), inset 0 1px 0 rgba(255,255,255,0.1),
+        0 14px 32px rgba(9,40,32,0.5);
     }
-    .logo svg { width: 30px; height: 30px; }
-    h1 { font-size: 22px; letter-spacing: 0.2px; }
-    h1 b { color: var(--acc); }
-    header .sub { color: var(--txt3); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+    .logo svg { width: 32px; height: 32px; }
+    h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
+    h1 b {
+      background: linear-gradient(95deg, var(--acc), var(--cyan));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    header .sub {
+      margin-top: 3px;
+      color: var(--txt-3); font-size: 11px; font-weight: 700;
+      letter-spacing: 1.4px; text-transform: uppercase;
+    }
+    header .spacer { flex: 1; }
+    .ver-chip {
+      font-size: 10px; font-weight: 700; color: var(--txt-2);
+      padding: 7px 13px; border-radius: 999px;
+      background: rgba(255,255,255,0.045); border: 1px solid var(--bd);
+      letter-spacing: 0.6px;
+    }
 
+    /* banner */
     .banner {
-      display: flex; gap: 16px; align-items: center;
-      background: linear-gradient(120deg, rgba(46,220,150,0.14), rgba(74,168,255,0.08));
-      border: 1px solid rgba(46,220,150,0.25);
-      border-radius: 18px; padding: 18px 20px; margin-bottom: 22px;
+      position: relative;
+      display: flex; gap: 20px; align-items: center;
+      background:
+        radial-gradient(420px 220px at 85% -20%, rgba(46,230,168,0.16), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.018));
+      border: 1px solid var(--bd);
+      border-radius: 24px; padding: 22px 26px; margin-bottom: 20px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.08);
+      overflow: hidden;
     }
-    .banner .lottie-wrap {
-      width: 92px; height: 92px; flex: none;
+    .lottie-wrap {
+      position: relative;
+      width: 118px; height: 118px; flex: none;
       border-radius: 50%;
-      background: radial-gradient(circle at 50% 40%, rgba(46,220,150,0.25), transparent 70%);
+      background: radial-gradient(circle at 50% 40%, rgba(46,230,168,0.24), transparent 70%);
       display: grid; place-items: center;
     }
-    #lottie { width: 84px; height: 84px; }
-    .banner .txt h2 { font-size: 16px; margin-bottom: 4px; }
-    .banner .txt p { color: var(--txt2); font-size: 12.5px; line-height: 1.6; }
-    .banner .txt b { color: var(--acc); }
+    .lottie-wrap::before {
+      content: ""; position: absolute; inset: 6px;
+      border-radius: 50%; border: 1.5px dashed rgba(46,230,168,0.32);
+      animation: spin 24s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #lottie { width: 104px; height: 104px; filter: drop-shadow(0 10px 22px rgba(46,230,168,0.28)); }
+    .banner .txt { flex: 1; }
+    .banner .txt h2 { font-size: 18px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 6px; }
+    .banner .txt p { color: var(--txt-2); font-size: 12.5px; line-height: 1.75; max-width: 560px; }
+    .banner .txt b { color: var(--acc); font-weight: 800; }
+    .banner .txt .cy { color: var(--cyan); font-weight: 700; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+    /* grade de cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 15px;
+    }
     .card {
-      background: var(--card); border: 1px solid var(--card-bd);
-      border-radius: var(--radius); padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: var(--r-lg);
+      padding: 20px 22px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.05);
     }
     .card h3 {
-      font-size: 11px; letter-spacing: 1.1px; text-transform: uppercase;
-      color: var(--txt3); margin-bottom: 14px; font-weight: 700;
+      display: flex; align-items: center; gap: 9px;
+      font-size: 11px; font-weight: 800;
+      letter-spacing: 1.3px; text-transform: uppercase;
+      color: var(--txt-3); margin-bottom: 15px;
     }
+    .card h3 .ic {
+      width: 26px; height: 26px; border-radius: 9px;
+      display: grid; place-items: center; font-size: 13px;
+    }
+    .ic.g { background: rgba(46,230,168,0.13); }
+    .ic.b { background: rgba(62,212,246,0.13); }
+    .ic.v { background: rgba(141,125,248,0.14); }
+    .ic.a { background: rgba(255,201,92,0.13); }
+
     .row {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+      gap: 14px;
+      padding: 11.5px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .row:last-child { border-bottom: none; }
-    .row .lbl { display: flex; flex-direction: column; gap: 2px; }
-    .row .lbl b { font-size: 13.5px; font-weight: 600; }
-    .row .lbl span { font-size: 11px; color: var(--txt3); }
-    .switch { position: relative; width: 44px; height: 24px; flex: none; }
+    .row .lbl { display: flex; flex-direction: column; gap: 2.5px; min-width: 0; }
+    .row .lbl b { font-size: 13.5px; font-weight: 700; letter-spacing: -0.1px; }
+    .row .lbl span { font-size: 11px; color: var(--txt-3); line-height: 1.5; }
+
+    /* switch */
+    .switch { position: relative; width: 46px; height: 25px; flex: none; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; inset: 0; cursor: pointer;
       background: rgba(255,255,255,0.12); border-radius: 99px;
-      transition: 0.25s;
+      transition: 0.25s; border: 1px solid rgba(255,255,255,0.07);
     }
     .slider::before {
       content: ""; position: absolute; width: 18px; height: 18px;
-      left: 3px; top: 3px; background: #fff; border-radius: 50%;
-      transition: 0.25s;
+      left: 3px; top: 2.5px; background: #fff; border-radius: 50%;
+      transition: 0.25s; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
-    input:checked + .slider { background: var(--acc); }
-    input:checked + .slider::before { transform: translateX(20px); }
+    input:checked + .slider {
+      background: linear-gradient(120deg, var(--acc-deep), var(--acc));
+      border-color: transparent;
+    }
+    input:checked + .slider::before { transform: translateX(20.5px); }
 
-    select {
-      background: rgba(255,255,255,0.06); color: var(--txt);
-      border: 1px solid var(--card-bd); border-radius: 10px;
-      padding: 8px 12px; font-size: 12.5px; outline: none; cursor: pointer;
+    /* inputs */
+    select, input[type="url"], input[type="text"] {
+      background: rgba(255,255,255,0.055); color: var(--txt);
+      border: 1px solid var(--bd); border-radius: var(--r-sm);
+      padding: 9px 12px; font-size: 12px; font-family: var(--font);
+      outline: none; cursor: pointer; transition: border-color 0.2s;
+    }
+    select:focus, input:focus { border-color: rgba(46,230,168,0.5); }
+    input[type="url"] {
+      width: 100%; cursor: text; font-size: 11px;
+      margin-top: 8px;
     }
     .btn {
-      border: 1px solid var(--card-bd); background: rgba(255,255,255,0.06);
-      color: var(--txt2); font-size: 12px; font-weight: 600;
-      padding: 9px 16px; border-radius: 11px; cursor: pointer; transition: 0.2s;
+      border: 1px solid var(--bd); background: rgba(255,255,255,0.055);
+      color: var(--txt-2); font-family: var(--font);
+      font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px;
+      padding: 10px 17px; border-radius: var(--r-sm); cursor: pointer;
+      transition: all 0.2s; white-space: nowrap;
     }
-    .btn:hover { border-color: rgba(46,220,150,0.5); color: var(--acc); }
-    .btn.danger:hover { border-color: rgba(255,92,108,0.5); color: var(--danger); }
+    .btn:hover { border-color: rgba(46,230,168,0.45); color: var(--acc); transform: translateY(-1px); }
+    .btn.primary {
+      background: linear-gradient(120deg, rgba(46,230,168,0.2), rgba(46,230,168,0.08));
+      border-color: rgba(46,230,168,0.4); color: var(--acc);
+    }
+    .btn.danger:hover { border-color: rgba(255,107,125,0.5); color: var(--rose); }
+    .btn:disabled { opacity: 0.55; cursor: wait; transform: none; }
 
-    .stats-line { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+    /* status da atualização */
+    .upd-status {
+      margin-top: 14px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 9px;
+    }
+    .st {
+      background: var(--card-2); border: 1px solid var(--bd-2);
+      border-radius: var(--r-sm); padding: 10px 12px;
+    }
+    .st .k {
+      font-size: 8.5px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--txt-3);
+    }
+    .st .v {
+      margin-top: 4px; font-size: 13.5px; font-weight: 800;
+      letter-spacing: -0.2px; font-variant-numeric: tabular-nums;
+    }
+    .st .v.ok { color: var(--acc); }
+    .st .v.warn { color: var(--amber); }
+    .st .v.err { color: var(--rose); }
+    .st .v.cy { color: var(--cyan); }
+
+    .hint {
+      margin-top: 11px;
+      font-size: 10.5px; color: var(--txt-3); line-height: 1.7;
+      padding: 10px 12px;
+      background: rgba(62,212,246,0.06);
+      border: 1px solid rgba(62,212,246,0.14);
+      border-radius: var(--r-sm);
+    }
+    .hint b { color: var(--cyan); }
+
+    /* chips de estatísticas */
+    .stats-line { display: flex; gap: 11px; flex-wrap: wrap; margin-top: 4px; }
     .chip {
-      padding: 8px 13px; border-radius: 11px; font-size: 12px;
-      background: rgba(255,255,255,0.05); border: 1px solid var(--card-bd);
+      flex: 1; min-width: 110px;
+      padding: 13px 15px; border-radius: 14px;
+      background: var(--card-2); border: 1px solid var(--bd-2);
     }
-    .chip b { font-size: 15px; display: block; margin-top: 2px; }
+    .chip span {
+      font-size: 8.5px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--txt-3);
+    }
+    .chip b {
+      display: block; margin-top: 5px;
+      font-size: 19px; font-weight: 800; letter-spacing: -0.4px;
+      font-variant-numeric: tabular-nums;
+    }
     .chip.a b { color: var(--acc); } .chip.t b { color: var(--violet); }
-    .chip.m b { color: var(--danger); } .chip.c b { color: var(--blue); }
+    .chip.m b { color: var(--rose); } .chip.c b { color: var(--cyan); }
 
-    .whitelist { display: flex; flex-wrap: wrap; gap: 8px; min-height: 20px; }
+    /* whitelist */
+    .whitelist { display: flex; flex-wrap: wrap; gap: 8px; min-height: 24px; }
     .wl-item {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(255,200,87,0.1); border: 1px solid rgba(255,200,87,0.3);
-      color: var(--warn); font-size: 11.5px; font-weight: 600;
-      padding: 6px 10px; border-radius: 9px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,201,92,0.1); border: 1px solid rgba(255,201,92,0.3);
+      color: var(--amber); font-size: 11.5px; font-weight: 700;
+      padding: 7px 11px; border-radius: 10px;
     }
     .wl-item button {
-      background: none; border: none; color: var(--warn); cursor: pointer;
-      font-size: 13px; line-height: 1; opacity: 0.8;
+      background: none; border: none; color: var(--amber); cursor: pointer;
+      font-size: 13px; line-height: 1; opacity: 0.75; font-family: var(--font);
     }
     .wl-item button:hover { opacity: 1; }
-    .wl-empty { color: var(--txt3); font-size: 11.5px; font-style: italic; }
+    .wl-empty { color: var(--txt-3); font-size: 11.5px; font-style: italic; }
 
     footer {
-      margin-top: 28px; text-align: center;
-      color: var(--txt3); font-size: 11px; line-height: 1.9;
+      margin-top: 32px; text-align: center;
+      color: var(--txt-3); font-size: 11px; line-height: 2;
     }
     footer b { color: var(--acc); }
+
     #toast {
-      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 24px);
-      background: rgba(20,32,52,0.97); border: 1px solid rgba(46,220,150,0.4);
-      color: var(--txt); padding: 11px 18px; border-radius: 13px; font-size: 12.5px;
-      opacity: 0; pointer-events: none; transition: 0.28s;
-      box-shadow: 0 14px 40px rgba(0,0,0,0.5);
+      position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 26px);
+      background: rgba(16,26,44,0.97); border: 1px solid rgba(46,230,168,0.4);
+      color: var(--txt); padding: 12px 20px; border-radius: 14px;
+      font-size: 12.5px; font-weight: 600;
+      opacity: 0; pointer-events: none; transition: 0.28s cubic-bezier(0.22,0.9,0.28,1);
+      box-shadow: 0 18px 46px rgba(0,0,0,0.55);
+      max-width: 420px; text-align: center;
     }
     #toast.show { opacity: 1; transform: translate(-50%, 0); }
   </style>
@@ -141,14 +268,16 @@
     <header>
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L20 5.2V11c0 5.25-3.4 9.3-8 11-4.6-1.7-8-5.75-8-11V5.2L12 2z" fill="#2edc96" opacity="0.92"/>
-          <path d="M8.2 11.6l2.6 2.7 5-5.4" stroke="#0b1220" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2L20 5.2V11c0 5.25-3.4 9.3-8 11-4.6-1.7-8-5.75-8-11V5.2L12 2z" fill="#2ee6a8" opacity="0.95"/>
+          <path d="M8.2 11.6l2.6 2.7 5-5.4" stroke="#06231a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
       <div>
         <h1>Aegis<b>Block</b></h1>
         <div class="sub">Ad &amp; Tracker Shield — Settings</div>
       </div>
+      <div class="spacer"></div>
+      <div class="ver-chip">v1.1.0</div>
     </header>
 
     <div class="banner">
@@ -157,76 +286,125 @@
         <h2 id="bannerTitle">Proteção ativa</h2>
         <p id="bannerText">
           <b>150.099 URLs</b> de anúncios e rastreadores bloqueadas ·
-          Listas curadas com foco em zero falso-positivo ·
-          Escudo invisível no YouTube.
+          A lista é <span class="cy">atualizada automaticamente a cada 5 horas</span>
+          direto do arquivo raw — você nunca precisa reinstalar a extensão
+          para receber URLs novas ou correções de falsos positivos.
         </p>
       </div>
     </div>
 
     <div class="grid">
+      <!-- PROTEÇÃO -->
       <div class="card">
-        <h3>Proteção</h3>
+        <h3><span class="ic g">🛡</span> Proteção</h3>
         <div class="row">
-          <div class="lbl"><b id="l-enabled">Proteção principal</b><span id="s-enabled">Ativa/desativa todos os bloqueios</span></div>
+          <div class="lbl"><b>Proteção principal</b><span>Ativa ou desativa todos os bloqueios</span></div>
           <label class="switch"><input type="checkbox" id="t-enabled" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-ads">Bloquear anúncios</b><span id="s-ads">Banners, pop-ups, pré-rolls</span></div>
+          <div class="lbl"><b>Bloquear anúncios</b><span>Banners, pop-ups, pré-rolls, nativos</span></div>
           <label class="switch"><input type="checkbox" id="t-blockAds" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-trackers">Bloquear rastreadores</b><span id="s-trackers">Analytics, pixels, fingerprint</span></div>
+          <div class="lbl"><b>Bloquear rastreadores</b><span>Analytics, pixels, fingerprint</span></div>
           <label class="switch"><input type="checkbox" id="t-blockTrackers" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-malware">Bloquear ameaças</b><span id="s-malware">Malvertising, golpes, redirecionamentos</span></div>
+          <div class="lbl"><b>Bloquear ameaças</b><span>Malvertising, golpes, redirecionamentos</span></div>
           <label class="switch"><input type="checkbox" id="t-blockMalware" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-cosmetic">Ocultar elementos de anúncio</b><span id="s-cosmetic">Espaços publicitários no layout</span></div>
+          <div class="lbl"><b>Ocultar elementos de anúncio</b><span>Espaços publicitários no layout</span></div>
           <label class="switch"><input type="checkbox" id="t-cosmeticFiltering" checked /><span class="slider"></span></label>
         </div>
       </div>
 
+      <!-- ATUALIZAÇÃO DA LISTA -->
       <div class="card">
-        <h3>Avançado</h3>
+        <h3><span class="ic b">⟳</span> Atualização de listas</h3>
         <div class="row">
-          <div class="lbl"><b id="l-yt">Escudo YouTube</b><span id="s-yt">Remove anúncios sem quebrar o vídeo</span></div>
+          <div class="lbl"><b>Atualização automática</b><span>Baixa as URLs novas do arquivo raw</span></div>
+          <label class="switch"><input type="checkbox" id="t-autoUpdate" checked /><span class="slider"></span></label>
+        </div>
+        <div class="row">
+          <div class="lbl"><b>Intervalo</b><span>Padrão: 5 horas</span></div>
+          <select id="t-interval">
+            <option value="1">A cada 1 hora</option>
+            <option value="3">A cada 3 horas</option>
+            <option value="5" selected>A cada 5 horas</option>
+            <option value="12">A cada 12 horas</option>
+            <option value="24">A cada 24 horas</option>
+            <option value="48">A cada 2 dias</option>
+            <option value="0">Somente manual</option>
+          </select>
+        </div>
+        <div class="row" style="flex-direction:column;align-items:stretch;gap:0">
+          <div class="lbl"><b>Fonte da lista (URL raw)</b><span>Qualquer arquivo no formato URL&lt;tab&gt;categoria</span></div>
+          <input type="url" id="t-sourceUrl" spellcheck="false" />
+        </div>
+        <div class="row">
+          <div class="lbl"><b>Aplicar agora</b><span>Busca e aplica as mudanças imediatamente</span></div>
+          <button class="btn primary" id="btnUpdateNow">⟳ Atualizar agora</button>
+        </div>
+
+        <div class="upd-status">
+          <div class="st"><div class="k">Última atualização</div><div class="v ok" id="st-last">—</div></div>
+          <div class="st"><div class="k">Próxima</div><div class="v cy" id="st-next">—</div></div>
+          <div class="st"><div class="k">URLs remotas</div><div class="v" id="st-remote">—</div></div>
+          <div class="st"><div class="k">Adicionadas</div><div class="v ok" id="st-added">—</div></div>
+          <div class="st"><div class="k">Removidas (corrigidas)</div><div class="v warn" id="st-removed">—</div></div>
+          <div class="st"><div class="k">Estado</div><div class="v ok" id="st-state">OK</div></div>
+        </div>
+
+        <div class="hint">
+          <b>Como funciona:</b> a cada intervalo, a extensão compara o arquivo raw com
+          a lista embutida. URLs novas viram regras de bloqueio imediatamente; URLs
+          removidas viram exceções (corrige falsos positivos). Nenhuma atualização
+          da extensão é necessária.
+        </div>
+      </div>
+
+      <!-- AVANÇADO -->
+      <div class="card">
+        <h3><span class="ic v">⚙</span> Avançado</h3>
+        <div class="row">
+          <div class="lbl"><b>Escudo YouTube</b><span>Remove anúncios sem quebrar o vídeo</span></div>
           <label class="switch"><input type="checkbox" id="t-youtubeShield" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-stealth">Modo discreto</b><span id="s-stealth">Menos rastro para anti-adblock</span></div>
+          <div class="lbl"><b>Modo discreto</b><span>Menos rastro para sistemas anti-adblock</span></div>
           <label class="switch"><input type="checkbox" id="t-stealth" checked /><span class="slider"></span></label>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-lang">Idioma</b><span id="s-lang">Interface</span></div>
+          <div class="lbl"><b>Idioma da interface</b><span>12 idiomas disponíveis</span></div>
           <select id="t-language"></select>
         </div>
         <div class="row">
-          <div class="lbl"><b id="l-reset">Estatísticas</b><span id="s-reset">Zera os contadores</span></div>
+          <div class="lbl"><b>Estatísticas</b><span>Zera todos os contadores</span></div>
           <button class="btn danger" id="btnReset">Zerar estatísticas</button>
         </div>
       </div>
 
+      <!-- ESTATÍSTICAS -->
       <div class="card">
-        <h3>Estatísticas ao vivo</h3>
+        <h3><span class="ic a">📊</span> Estatísticas ao vivo</h3>
         <div class="stats-line">
-          <div class="chip a">Anúncios<b id="st-ads">0</b></div>
-          <div class="chip t">Rastreadores<b id="st-trackers">0</b></div>
-          <div class="chip m">Ameaças<b id="st-malware">0</b></div>
-          <div class="chip c">Ocultos<b id="st-cosmetics">0</b></div>
+          <div class="chip a"><span>Anúncios</span><b id="st-ads">0</b></div>
+          <div class="chip t"><span>Rastreadores</span><b id="st-trackers">0</b></div>
+          <div class="chip m"><span>Ameaças</span><b id="st-malware">0</b></div>
+          <div class="chip c"><span>Ocultos</span><b id="st-cosmetics">0</b></div>
         </div>
       </div>
 
+      <!-- WHITELIST -->
       <div class="card">
-        <h3>Sites permitidos (whitelist)</h3>
+        <h3><span class="ic a">✓</span> Sites permitidos (whitelist)</h3>
         <div class="whitelist" id="whitelist"><div class="wl-empty">Nenhum site na lista de exceções.</div></div>
       </div>
     </div>
 
     <footer>
-      AegisBlock v1.0.0 · <b>150.099</b> URLs na lista de bloqueio ·
-      739 domínios curados · 35.446 hosts protegidos<br />
+      AegisBlock v1.1.0 · <b>150.099</b> URLs embutidas · lista remota sincronizada automaticamente<br />
       Privacidade: nenhum dado sai do seu navegador. Código aberto (MIT).
     </footer>
   </div>
