@@ -1,0 +1,14 @@
+{
+  "urls": 150099,
+  "urlsAds": 97443,
+  "urlsTrackers": 37056,
+  "urlsMalware": 15600,
+  "hosts": 35446,
+  "hostsAds": 19479,
+  "hostsTrackers": 12847,
+  "hostsMalware": 3120,
+  "curatedDomains": 739,
+  "rules": 150209,
+  "languages": 12,
+  "listVersion": 1
+}

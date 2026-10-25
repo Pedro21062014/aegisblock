@@ -1,6 +1,7 @@
 /**
- * AegisBlock — Popup (i18n + estatísticas + animação de segurança)
- * Funciona como extensão (chrome.*) e como página de demonstração (fallback).
+ * AegisBlock — Popup (i18n + dados reais + animação de segurança)
+ * Dados exibidos: métricas REAIS da lista (data/facts.json), contadores
+ * REAIS de bloqueio (service worker) e status REAL da atualização remota.
  */
 (() => {
   "use strict";
@@ -223,18 +224,18 @@
 
   // chaves complementares por idioma
   const EXTRA = {
-    "en": { since: "since activation", headlineOn: "Ad Shield Active", headlineOff: "Shield Disabled", totalBlocked: "Total blocked", list: "Blocklist", ago: "{x} ago", waiting: "waiting for first sync" },
-    "pt-BR": { since: "desde a ativação", headlineOn: "Escudo Anti-Anúncios Ativo", headlineOff: "Escudo Desativado", totalBlocked: "Total bloqueado", list: "Lista de bloqueio", ago: "há {x}", waiting: "aguardando 1ª atualização" },
-    "es": { since: "desde la activación", headlineOn: "Escudo Anti-Anuncios Activo", headlineOff: "Escudo Desactivado", totalBlocked: "Total bloqueado", list: "Lista de bloqueo", ago: "hace {x}", waiting: "esperando la 1ª actualización" },
-    "fr": { since: "depuis l'activation", headlineOn: "Bouclier Anti-Pubs Actif", headlineOff: "Bouclier Désactivé", totalBlocked: "Total bloqué", list: "Liste de blocage", ago: "il y a {x}", waiting: "en attente de la 1re synchro" },
-    "de": { since: "seit Aktivierung", headlineOn: "Werbeschutz Aktiv", headlineOff: "Schutz Deaktiviert", totalBlocked: "Gesamt blockiert", list: "Blockliste", ago: "vor {x}", waiting: "warte auf erste Aktualisierung" },
-    "it": { since: "dall'attivazione", headlineOn: "Scudo Anti-Pubblicità Attivo", headlineOff: "Scudo Disattivato", totalBlocked: "Totale bloccato", list: "Lista di blocco", ago: "{x} fa", waiting: "in attesa del 1° aggiornamento" },
-    "ja": { since: "有効化以降", headlineOn: "広告ブロック有効", headlineOff: "シールド無効", totalBlocked: "合計ブロック", list: "ブロックリスト", ago: "{x}前", waiting: "初回同期待ち" },
-    "zh-CN": { since: "自启用以来", headlineOn: "广告防护已启用", headlineOff: "防护已关闭", totalBlocked: "总拦截", list: "拦截列表", ago: "{x}前", waiting: "等待首次同步" },
-    "ru": { since: "с момента включения", headlineOn: "Защита от рекламы активна", headlineOff: "Защита отключена", totalBlocked: "Всего заблокировано", list: "Список блокировки", ago: "{x} назад", waiting: "ожидание первой синхронизации" },
-    "ko": { since: "활성화 이후", headlineOn: "광고 차단 활성화됨", headlineOff: "실드 비활성화됨", totalBlocked: "총 차단", list: "차단 목록", ago: "{x} 전", waiting: "첫 동기화 대기 중" },
-    "ar": { since: "منذ التفعيل", headlineOn: "درع الإعلانات نشط", headlineOff: "الدرع معطل", totalBlocked: "إجمالي المحظور", list: "قائمة الحظر", ago: "منذ {x}", waiting: "في انتظار أول مزامنة" },
-    "hi": { since: "सक्रियण के बाद से", headlineOn: "विज्ञापन शील्ड सक्रिय", headlineOff: "शील्ड अक्षम", totalBlocked: "कुल अवरुद्ध", list: "ब्लॉक सूची", ago: "{x} पहले", waiting: "पहली सिंक की प्रतीक्षा" },
+    "en": { since: "since activation", headlineOn: "Ad Shield Active", headlineOff: "Shield Disabled", totalBlocked: "Total blocked", onThisPage: "On this page", list: "Blocklist", listUrls: "URLs", chartEmpty: "Your protection data will appear here", tour: "Tour", ago: "{x} ago", waiting: "waiting for first sync" },
+    "pt-BR": { since: "desde a ativação", headlineOn: "Escudo Anti-Anúncios Ativo", headlineOff: "Escudo Desativado", totalBlocked: "Total bloqueado", onThisPage: "Nesta página", list: "Lista de bloqueio", listUrls: "URLs", chartEmpty: "Seus dados de proteção aparecem aqui", tour: "Tour", ago: "há {x}", waiting: "aguardando 1ª atualização" },
+    "es": { since: "desde la activación", headlineOn: "Escudo Anti-Anuncios Activo", headlineOff: "Escudo Desactivado", totalBlocked: "Total bloqueado", onThisPage: "En esta página", list: "Lista de bloqueo", listUrls: "URLs", chartEmpty: "Tus datos de protección aparecerán aquí", tour: "Tour", ago: "hace {x}", waiting: "esperando la 1ª actualización" },
+    "fr": { since: "depuis l'activation", headlineOn: "Bouclier Anti-Pubs Actif", headlineOff: "Bouclier Désactivé", totalBlocked: "Total bloqué", onThisPage: "Sur cette page", list: "Liste de blocage", listUrls: "URLs", chartEmpty: "Vos données de protection apparaîtront ici", tour: "Visite", ago: "il y a {x}", waiting: "en attente de la 1re synchro" },
+    "de": { since: "seit Aktivierung", headlineOn: "Werbeschutz Aktiv", headlineOff: "Schutz Deaktiviert", totalBlocked: "Gesamt blockiert", onThisPage: "Auf dieser Seite", list: "Blockliste", listUrls: "URLs", chartEmpty: "Ihre Schutzdaten erscheinen hier", tour: "Tour", ago: "vor {x}", waiting: "warte auf erste Aktualisierung" },
+    "it": { since: "dall'attivazione", headlineOn: "Scudo Anti-Pubblicità Attivo", headlineOff: "Scudo Disattivato", totalBlocked: "Totale bloccato", onThisPage: "In questa pagina", list: "Lista di blocco", listUrls: "URL", chartEmpty: "I tuoi dati di protezione appariranno qui", tour: "Tour", ago: "{x} fa", waiting: "in attesa del 1° aggiornamento" },
+    "ja": { since: "有効化以降", headlineOn: "広告ブロック有効", headlineOff: "シールド無効", totalBlocked: "合計ブロック", onThisPage: "このページ", list: "ブロックリスト", listUrls: "URL", chartEmpty: "保護データはここに表示されます", tour: "ツアー", ago: "{x}前", waiting: "初回同期待ち" },
+    "zh-CN": { since: "自启用以来", headlineOn: "广告防护已启用", headlineOff: "防护已关闭", totalBlocked: "总拦截", onThisPage: "本页面", list: "拦截列表", listUrls: "URL", chartEmpty: "您的防护数据将显示在此处", tour: "导览", ago: "{x}前", waiting: "等待首次同步" },
+    "ru": { since: "с момента включения", headlineOn: "Защита от рекламы активна", headlineOff: "Защита отключена", totalBlocked: "Всего заблокировано", onThisPage: "На этой странице", list: "Список блокировки", listUrls: "URL", chartEmpty: "Ваши данные о защите появятся здесь", tour: "Тур", ago: "{x} назад", waiting: "ожидание первой синхронизации" },
+    "ko": { since: "활성화 이후", headlineOn: "광고 차단 활성화됨", headlineOff: "실드 비활성화됨", totalBlocked: "총 차단", onThisPage: "이 페이지", list: "차단 목록", listUrls: "URL", chartEmpty: "보호 데이터가 여기에 표시됩니다", tour: "투어", ago: "{x} 전", waiting: "첫 동기화 대기 중" },
+    "ar": { since: "منذ التفعيل", headlineOn: "درع الإعلانات نشط", headlineOff: "الدرع معطل", totalBlocked: "إجمالي المحظور", onThisPage: "في هذه الصفحة", list: "قائمة الحظر", listUrls: "رابط", chartEmpty: "ستظهر بيانات الحماية هنا", tour: "جولة", ago: "منذ {x}", waiting: "في انتظار أول مزامنة" },
+    "hi": { since: "सक्रियण के बाद से", headlineOn: "विज्ञापन शील्ड सक्रिय", headlineOff: "शील्ड अक्षम", totalBlocked: "कुल अवरुद्ध", onThisPage: "इस पेज पर", list: "ब्लॉक सूची", listUrls: "URL", chartEmpty: "आपका सुरक्षा डेटा यहाँ दिखेगा", tour: "टूर", ago: "{x} पहले", waiting: "पहली सिंक की प्रतीक्षा" },
   };
   for (const code of Object.keys(EXTRA)) {
     if (I18N[code]) Object.assign(I18N[code], EXTRA[code]);
@@ -256,13 +257,13 @@
   }
 
   // ------------------------------------------------------------------
-  // Storage (chrome.storage com fallback localStorage p/ demo)
+  // Storage (chrome.storage via mensagens; fallback localStorage p/ demo)
   // ------------------------------------------------------------------
   const isExt = typeof chrome !== "undefined" && !!chrome.storage && !!chrome.runtime;
 
   function readStorage(key, fallback) {
     try {
-      const raw = isExt ? localStorage.getItem("aegis_" + key) : localStorage.getItem("aegis_" + key);
+      const raw = localStorage.getItem("aegis_" + key);
       if (!raw) return fallback;
       return JSON.parse(raw);
     } catch (e) {
@@ -286,23 +287,14 @@
   }
   function saveSettings(s) { writeStorage("settings", s); }
 
+  // Estatísticas: sempre do service worker quando possível (dados reais).
+  // Em modo demo (sem chrome.*), tudo começa do zero — honesto.
   function loadStats() {
-    const demo = {
-      ads: 12847, trackers: 6233, malware: 118, cosmetics: 3921,
-      sessions: 42, since: Date.now() - 1000 * 60 * 60 * 24 * 9,
-      days: {}, lastReset: Date.now(),
+    return {
+      ads: 0, trackers: 0, malware: 0, cosmetics: 0,
+      sessions: 0, since: Date.now(), days: {},
+      ...readStorage("stats", {}),
     };
-    // gera dias de demonstração coerentes
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000);
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      demo.days[key] = {
-        ads: 900 + Math.floor(Math.random() * 1600),
-        trackers: 400 + Math.floor(Math.random() * 900),
-        malware: Math.floor(Math.random() * 30),
-      };
-    }
-    return { ...demo, ...readStorage("stats", {}) };
   }
 
   // ------------------------------------------------------------------
@@ -334,8 +326,53 @@
     return `${(bytes / 1073741824).toFixed(2)} ${t("gb")}`;
   }
 
-  const AVG_AD_SECONDS = 5;       // ~5s de interrupção por anúncio
-  const AVG_AD_BYTES = 350 * 1024; // ~350KB por anúncio bloqueado
+  const AVG_AD_SECONDS = 5;
+  const AVG_AD_BYTES = 350 * 1024;
+
+  // ------------------------------------------------------------------
+  // Fatos REAIS da lista (data/facts.json)
+  // ------------------------------------------------------------------
+  let FACTS = null;
+
+  async function loadFacts() {
+    if (FACTS) return FACTS;
+    if (window.__FACTS__) { FACTS = window.__FACTS__; return FACTS; }
+    try {
+      const resp = await fetch("../data/facts.json");
+      FACTS = await resp.json();
+    } catch (e) {
+      FACTS = {
+        urls: 150099, urlsAds: 97443, urlsTrackers: 37056, urlsMalware: 15600,
+        hosts: 35446, curatedDomains: 739, rules: 150209, languages: 12,
+      };
+    }
+    return FACTS;
+  }
+
+  function renderDonut(facts) {
+    const C = 2 * Math.PI * 46; // circunferência
+    const ads = facts.urlsAds || 0, trk = facts.urlsTrackers || 0, mal = facts.urlsMalware || 0;
+    const total = Math.max(1, ads + trk + mal);
+    const seg = (v) => (v / total) * C;
+    const gap = 3; // pequeno espaço entre segmentos
+
+    const set = (id, len, offsetPrev) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const dash = Math.max(0, len - gap);
+      el.setAttribute("stroke-dasharray", `${dash} ${C - dash}`);
+      el.setAttribute("stroke-dashoffset", String(-offsetPrev));
+    };
+    set("dnAds", seg(ads), 0);
+    set("dnTrk", seg(trk), seg(ads));
+    set("dnMal", seg(mal), seg(ads) + seg(trk));
+
+    document.getElementById("donutN").textContent =
+      facts.urls >= 1000 ? `${Math.round(facts.urls / 1000)}K` : fmt(facts.urls);
+    document.getElementById("lnAds").textContent = fmt(ads);
+    document.getElementById("lnTrk").textContent = fmt(trk);
+    document.getElementById("lnMal").textContent = fmt(mal);
+  }
 
   // ------------------------------------------------------------------
   // Render
@@ -343,7 +380,6 @@
   function applyI18n() {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const k = el.getAttribute("data-i18n");
-      if (k === "heroText") return;
       el.textContent = t(k);
     });
     document.querySelectorAll("[data-i18n-title]").forEach((el) => {
@@ -372,14 +408,14 @@
       ? `${t("heroOn")}<br><b>${fmt(total)}</b> ${t("blockedToday")}`
       : `${t("heroOff")}`;
 
-    // estatísticas
+    // estatísticas reais
     document.getElementById("statAds").textContent = fmt(stats.ads || 0);
     document.getElementById("statTrack").textContent = fmt(stats.trackers || 0);
     document.getElementById("statMal").textContent = fmt(stats.malware || 0);
     document.getElementById("statCos").textContent = fmt(stats.cosmetics || 0);
-    const grandTotal = (stats.ads || 0) + (stats.trackers || 0) + (stats.malware || 0) + (stats.cosmetics || 0);
+    const grandTotal = total + (stats.cosmetics || 0);
     document.getElementById("totalN").textContent = fmt(grandTotal);
-    // barras de proporção
+
     const maxVal = Math.max(1, stats.ads || 0, stats.trackers || 0, stats.malware || 0, stats.cosmetics || 0);
     document.getElementById("barAds").style.width = `${Math.max(4, ((stats.ads || 0) / maxVal) * 100)}%`;
     document.getElementById("barTrk").style.width = `${Math.max(4, ((stats.trackers || 0) / maxVal) * 100)}%`;
@@ -390,19 +426,26 @@
 
     const seconds = (stats.ads || 0) * AVG_AD_SECONDS;
     const bytes = (stats.ads || 0) * AVG_AD_BYTES;
-    document.getElementById("valTime").textContent = fmtTime(seconds);
-    document.getElementById("valData").textContent = fmtBytes(bytes);
+    document.getElementById("valTime").textContent = total ? fmtTime(seconds) : "—";
+    document.getElementById("valData").textContent = total ? fmtBytes(bytes) : "—";
 
-    // gráfico 7 dias
+    // gráfico 7 dias (dados reais; estado vazio honesto)
     const bars = document.getElementById("bars");
     bars.innerHTML = "";
     const days = stats.days || {};
     const keys = Object.keys(days).sort().slice(-7);
     let max = 1;
+    let weekTotal = 0;
     keys.forEach((k) => {
       const d = days[k];
-      max = Math.max(max, (d.ads || 0) + (d.trackers || 0) + (d.malware || 0));
+      const s = (d.ads || 0) + (d.trackers || 0) + (d.malware || 0);
+      weekTotal += s;
+      max = Math.max(max, s);
     });
+    document.getElementById("weekTotal").textContent = fmt(weekTotal);
+    const chartEmpty = document.getElementById("chartEmpty");
+    if (chartEmpty) chartEmpty.hidden = weekTotal > 0;
+
     const dayLabels = {
       "pt-BR": ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
       "en": ["sun", "mon", "tue", "wed", "thu", "fri", "sat"],
@@ -418,62 +461,108 @@
       "hi": ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
     };
     const labels = dayLabels[lang] || dayLabels.en;
-    keys.forEach((k) => {
-      const d = days[k] || {};
+
+    // preenche os 7 dias (mesmo sem dados — barras mínimas discretas)
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date(today.getTime() - i * 86400000);
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      const d = days[key] || {};
       const col = document.createElement("div");
       col.className = "col";
-      const totalDay = Math.max(1, (d.ads || 0) + (d.trackers || 0) + (d.malware || 0));
       const mk = (cls, val) => {
-        const seg = document.createElement("div");
-        seg.className = "seg " + cls;
-        seg.style.height = `${Math.max(2, (val / max) * 46)}px`;
-        if (val > 0) col.appendChild(seg);
+        if (val <= 0 && weekTotal > 0) return;
+        const segEl = document.createElement("div");
+        segEl.className = "seg " + cls;
+        segEl.style.height = `${Math.max(2, (val / max) * 46)}px`;
+        if (val > 0 || weekTotal === 0) col.appendChild(segEl);
       };
-      mk("m", d.malware || 0);
-      mk("t", d.trackers || 0);
-      mk("a", d.ads || 0);
-      const date = new Date(k + "T12:00:00");
+      if (weekTotal === 0) {
+        const ghost = document.createElement("div");
+        ghost.className = "seg a";
+        ghost.style.height = "3px";
+        ghost.style.opacity = "0.25";
+        col.appendChild(ghost);
+      } else {
+        mk("m", d.malware || 0);
+        mk("t", d.trackers || 0);
+        mk("a", d.ads || 0);
+      }
       const lbl = document.createElement("div");
       lbl.className = "lbl";
       lbl.textContent = labels[date.getDay()] || "";
       col.appendChild(lbl);
-      col.title = `${k}: ${fmt(totalDay)}`;
+      col.title = `${key}: ${fmt((d.ads || 0) + (d.trackers || 0) + (d.malware || 0))}`;
       bars.appendChild(col);
-    });
-
-    // site atual
-    const siteD = document.getElementById("siteDomain");
-    const siteS = document.getElementById("siteState");
-    const siteBtn = document.getElementById("siteToggle");
-    let domain = "youtube.com";
-    if (isExt) {
-      try {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs && tabs[0] && tabs[0].url) {
-            try {
-              const u = new URL(tabs[0].url);
-              if (u.protocol.startsWith("http")) domain = u.hostname.replace(/^www\./, "");
-            } catch (e) {}
-          }
-          paintSite(domain, settings, siteD, siteS, siteBtn);
-        });
-      } catch (e) {
-        paintSite(domain, settings, siteD, siteS, siteBtn);
-      }
-    } else {
-      paintSite(domain, settings, siteD, siteS, siteBtn);
     }
 
     // rodapé
-    document.getElementById("verText").textContent = `v1.1.0`;
-    const urlsBadge = document.getElementById("urlsBadge");
-    if (urlsBadge) urlsBadge.textContent = "150.099";
+    document.getElementById("verText").textContent = `v1.2.0`;
   }
 
+  // ------------------------------------------------------------------
+  // Dados REAIS da página atual
+  // ------------------------------------------------------------------
+  function renderPage(data) {
+    const pageN = document.getElementById("pageN");
+    const siteCount = document.getElementById("siteCount");
+    const siteD = document.getElementById("siteDomain");
+    const siteS = document.getElementById("siteState");
+    const siteBtn = document.getElementById("siteToggle");
+    const siteFav = document.getElementById("siteFav");
+
+    const domain = (data && data.domain) || "";
+    const count = (data && data.tabCount) || 0;
+    const allowed = !!(data && data.whitelisted);
+
+    pageN.textContent = fmt(count);
+    if (siteCount) siteCount.textContent = fmt(count);
+    if (domain) {
+      siteD.textContent = domain;
+      siteFav.textContent = domain.charAt(0).toUpperCase();
+    } else {
+      siteD.textContent = "—";
+      siteFav.textContent = "?";
+    }
+    const settings = loadSettings();
+    siteS.textContent = allowed || !settings.enabled ? t("siteOff") : t("siteOn");
+    siteBtn.textContent = allowed ? t("disallow") : t("allow");
+    siteBtn.classList.toggle("allowed", allowed);
+    siteBtn.onclick = () => {
+      const s = loadSettings();
+      s.whitelist = s.whitelist || [];
+      const idx = s.whitelist.indexOf(domain);
+      if (idx >= 0) s.whitelist.splice(idx, 1);
+      else if (domain) s.whitelist.push(domain);
+      saveSettings(s);
+      if (isExt) {
+        try { chrome.runtime.sendMessage({ type: "setSettings", patch: { whitelist: s.whitelist } }); } catch (e) {}
+      }
+      renderPage({ ...data, whitelisted: s.whitelist.includes(domain) });
+    };
+  }
+
+  function loadPageData() {
+    if (!isExt) {
+      renderPage({ domain: "youtube.com", tabCount: 0, whitelisted: false });
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage({ type: "getPageData" }, (res) => {
+        if (res && res.ok) renderPage(res);
+        else renderPage({ domain: "", tabCount: 0, whitelisted: false });
+      });
+    } catch (e) {
+      renderPage({ domain: "", tabCount: 0, whitelisted: false });
+    }
+  }
+
+  // ------------------------------------------------------------------
+  // Status da lista remota (dados reais)
+  // ------------------------------------------------------------------
   function fmtAgo(ts) {
     if (!ts) return null;
-    const diff = Math.max(0, Date.now() - ts);
-    const mins = Math.round(diff / 60000);
+    const mins = Math.round((Date.now() - ts) / 60000);
     if (mins < 1) return "1min";
     if (mins < 60) return `${mins}min`;
     const h = Math.round(mins / 60);
@@ -487,24 +576,23 @@
     const sync = document.getElementById("listSync");
     if (!meta || !pill) return;
     if (!st) {
-      meta.innerHTML = `<b>150.099</b> URLs · ${t("waiting")}`;
+      meta.textContent = t("waiting");
       return;
     }
     sync.classList.toggle("spinning", !!st.updating);
-    const total = st.remoteCount || 150099;
     const ago = fmtAgo(st.lastSuccess);
+    const parts = [];
     if (st.updating) {
-      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("waiting")}`;
-      pill.textContent = "···";
-      pill.classList.remove("off");
-      return;
-    }
-    const interval = st.autoUpdate === false ? null : (st.intervalHours || 5);
-    if (ago) {
-      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("ago").replace("{x}", ago)}`;
+      parts.push(t("waiting"));
+    } else if (ago) {
+      parts.push(t("ago").replace("{x}", ago));
     } else {
-      meta.innerHTML = `<b>${fmt(total)}</b> URLs · ${t("waiting")}`;
+      parts.push(t("waiting"));
     }
+    if (st.addedCount) parts.push(`+${fmt(st.addedCount)}`);
+    if (st.removedCount) parts.push(`−${fmt(st.removedCount)}`);
+    meta.textContent = parts.join(" · ");
+    const interval = st.autoUpdate === false ? null : (st.intervalHours || 5);
     if (interval) {
       pill.textContent = `${interval}h`;
       pill.classList.remove("off");
@@ -512,46 +600,20 @@
       pill.textContent = "OFF";
       pill.classList.add("off");
     }
-    if (st.addedCount) {
-      meta.innerHTML += ` · +${fmt(st.addedCount)}`;
-    }
   }
 
   function loadListStatus() {
     if (!isExt) {
-      renderListStatus({ remoteCount: 150099, lastSuccess: Date.now() - 2 * 3600000, autoUpdate: true, intervalHours: 5, addedCount: 128 });
+      renderListStatus(null);
       return;
     }
     try {
       chrome.runtime.sendMessage({ type: "getListStatus" }, (res) => {
-        if (res && res.status) renderListStatus(res.status);
-        else renderListStatus(null);
+        renderListStatus((res && res.status) || null);
       });
     } catch (e) {
       renderListStatus(null);
     }
-  }
-
-  function paintSite(domain, settings, siteD, siteS, siteBtn) {
-    siteD.textContent = domain;
-    const fav = document.getElementById("siteFav");
-    if (fav) fav.textContent = (domain || "?").charAt(0).toUpperCase();
-    const allowed = (settings.whitelist || []).includes(domain);
-    siteBtn.textContent = allowed ? t("disallow") : t("allow");
-    siteBtn.classList.toggle("allowed", allowed);
-    siteS.textContent = allowed || !settings.enabled ? t("siteOff") : t("siteOn");
-    siteBtn.onclick = () => {
-      const s = loadSettings();
-      s.whitelist = s.whitelist || [];
-      const idx = s.whitelist.indexOf(domain);
-      if (idx >= 0) s.whitelist.splice(idx, 1);
-      else s.whitelist.push(domain);
-      saveSettings(s);
-      if (isExt) {
-        try { chrome.runtime.sendMessage({ type: "setSettings", patch: { whitelist: s.whitelist } }); } catch (e) {}
-      }
-      render();
-    };
   }
 
   // ------------------------------------------------------------------
@@ -561,12 +623,11 @@
     const container = document.getElementById("lottie");
     if (!container || !data) return;
     if (typeof lottie === "undefined") {
-      // fallback: SVG estático de cadeado
       container.innerHTML =
         '<svg viewBox="0 0 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">' +
-        '<rect x="30" y="52" width="60" height="46" rx="10" fill="#2edc96"/>' +
-        '<path d="M42 52 v-12 a18 18 0 0 1 36 0 v12" fill="none" stroke="#2edc96" stroke-width="9" stroke-linecap="round"/>' +
-        '<circle cx="60" cy="72" r="6" fill="#0b1220"/><rect x="57" y="72" width="6" height="14" rx="3" fill="#0b1220"/></svg>';
+        '<rect x="30" y="52" width="60" height="46" rx="10" fill="#2ee6a8"/>' +
+        '<path d="M42 52 v-12 a18 18 0 0 1 36 0 v12" fill="none" stroke="#2ee6a8" stroke-width="9" stroke-linecap="round"/>' +
+        '<circle cx="60" cy="72" r="6" fill="#06231a"/><rect x="57" y="72" width="6" height="14" rx="3" fill="#06231a"/></svg>';
       return;
     }
     try {
@@ -578,6 +639,7 @@
         animationData: data,
         rendererSettings: { preserveAspectRatio: "xMidYMid meet", progressiveLoad: true },
       });
+      anim.setSpeed(0.85);
       window.__aegisAnim = anim;
     } catch (e) {}
   }
@@ -616,24 +678,31 @@
       s.language = lang;
       saveSettings(s);
       render();
+      if (FACTS) renderDonut(FACTS);
     });
 
-    document.getElementById("linkStats").addEventListener("click", (e) => {
+    document.getElementById("linkTour").addEventListener("click", (e) => {
       e.preventDefault();
-      alertDemo(t("stats"));
+      if (isExt) {
+        try { chrome.runtime.sendMessage({ type: "openWelcome" }); } catch (err) {}
+      } else {
+        alertDemo(t("tour"));
+      }
     });
     document.getElementById("linkSettings").addEventListener("click", (e) => {
       e.preventDefault();
+      if (isExt) {
+        try { chrome.runtime.sendMessage({ type: "openOptions" }); return; } catch (err) {}
+      }
       alertDemo(t("settings"));
     });
     document.getElementById("linkAbout").addEventListener("click", (e) => {
       e.preventDefault();
-      alertDemo("AegisBlock v1.0.0 — " + t("tagline") + "\n150.099 " + t("urls"));
+      alertDemo(`AegisBlock v1.2.0 — ${t("tagline")}`);
     });
   }
 
   function alertDemo(msg) {
-    // Em contexto de extensão, abriria páginas internas; na demo mostra um toast
     const toast = document.getElementById("toast");
     toast.textContent = msg;
     toast.classList.add("show");
@@ -644,7 +713,7 @@
   // ------------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------------
-  function boot() {
+  async function boot() {
     lang = detectLang();
     const langEl = document.getElementById("lang");
     Object.keys(I18N).forEach((code) => {
@@ -656,9 +725,15 @@
     langEl.value = lang;
     bind();
     render();
-    loadLottie();
+
+    // dados reais
+    const facts = await loadFacts();
+    renderDonut(facts);
+    loadPageData();
     loadListStatus();
-    // atualização ao vivo das estatísticas
+    loadLottie();
+
+    // atualização ao vivo
     if (isExt) {
       setInterval(() => {
         try {
@@ -668,6 +743,9 @@
               if (res.settings) writeStorage("settings", res.settings);
               render();
             }
+          });
+          chrome.runtime.sendMessage({ type: "getPageData" }, (res) => {
+            if (res && res.ok) renderPage(res);
           });
         } catch (e) {}
       }, 5000);

@@ -47,9 +47,15 @@
     </div>
     <div class="headline" id="headline">Escudo Anti-Anúncios Ativo</div>
     <div class="subline" id="heroText">Bloqueando anúncios, rastreadores e ameaças.</div>
-    <div class="total-chip">
-      <div class="n" id="totalN">0</div>
-      <div class="l" data-i18n="totalBlocked">Total bloqueado</div>
+    <div class="chip-row">
+      <div class="total-chip">
+        <div class="n" id="totalN">0</div>
+        <div class="l" data-i18n="totalBlocked">Total bloqueado</div>
+      </div>
+      <div class="total-chip alt">
+        <div class="n g" id="pageN">0</div>
+        <div class="l" data-i18n="onThisPage">Nesta página</div>
+      </div>
     </div>
   </section>
 
@@ -57,7 +63,7 @@
   <section class="section">
     <div class="sec-head">
       <div class="t" data-i18n="stats">Estatísticas</div>
-      <div class="badge"><span id="urlsBadge">150.099</span> URLs</div>
+      <div class="badge" id="todayBadge" data-i18n="since">desde a ativação</div>
     </div>
     <div class="grid">
       <div class="card c-ads">
@@ -143,9 +149,12 @@
     <div class="chart-card">
       <div class="sec-head" style="margin:0 2px 10px">
         <div class="t" data-i18n="week">Últimos 7 dias</div>
-        <div class="badge" data-i18n="since">desde a ativação</div>
+        <div class="badge" id="weekTotal">0</div>
       </div>
       <div class="bars" id="bars"></div>
+      <div class="chart-empty" id="chartEmpty" hidden>
+        <span data-i18n="chartEmpty">Seus dados de proteção aparecem aqui</span>
+      </div>
       <div class="legend">
         <span><i style="background:#2ee6a8"></i><span data-i18n="ads">Anúncios</span></span>
         <span><i style="background:#8d7df8"></i><span data-i18n="trackers">Rastreadores</span></span>
@@ -154,18 +163,56 @@
     </div>
   </section>
 
-  <!-- ===== LISTA REMOTA ===== -->
-  <section class="list-strip" id="listStrip">
-    <div class="sync" id="listSync">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v5h-5"/>
-      </svg>
+  <!-- ===== LISTA (DONUT REAL + ATUALIZAÇÃO) ===== -->
+  <section class="section">
+    <div class="list-card">
+      <div class="list-top">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 120 120" class="donut" id="donut">
+            <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="15"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#2ee6a8" stroke-width="15"
+              stroke-dasharray="0 999" stroke-linecap="round" id="dnAds"
+              transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#8d7df8" stroke-width="15"
+              stroke-dasharray="0 999" stroke-linecap="round" id="dnTrk"
+              transform="rotate(-90 60 60)"/>
+            <circle cx="60" cy="60" r="46" fill="none" stroke="#ff6b7d" stroke-width="15"
+              stroke-dasharray="0 999" stroke-linecap="round" id="dnMal"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="donut-center">
+            <div class="n" id="donutN">150K</div>
+            <div class="l" data-i18n="listUrls">URLs</div>
+          </div>
+        </div>
+        <div class="list-legend">
+          <div class="ll">
+            <i style="background:#2ee6a8"></i>
+            <div><b id="lnAds">—</b><span data-i18n="ads">Anúncios</span></div>
+          </div>
+          <div class="ll">
+            <i style="background:#8d7df8"></i>
+            <div><b id="lnTrk">—</b><span data-i18n="trackers">Rastreadores</span></div>
+          </div>
+          <div class="ll">
+            <i style="background:#ff6b7d"></i>
+            <div><b id="lnMal">—</b><span data-i18n="malware">Ameaças</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="list-sync" id="listStrip">
+        <div class="sync" id="listSync">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v5h-5"/>
+          </svg>
+        </div>
+        <div class="info">
+          <div class="d" data-i18n="list">Lista de bloqueio</div>
+          <div class="s" id="listMeta">atualização automática a cada 5h</div>
+        </div>
+        <div class="pill" id="listPill">5h</div>
+      </div>
     </div>
-    <div class="info">
-      <div class="d" data-i18n="list">Lista de bloqueio</div>
-      <div class="s" id="listMeta"><b>150.099</b> URLs · atualização automática</div>
-    </div>
-    <div class="pill" id="listPill">5h</div>
   </section>
 
   <!-- ===== SITE ATUAL ===== -->
@@ -175,17 +222,18 @@
       <div class="d" id="siteDomain">youtube.com</div>
       <div class="s" id="siteState">Proteção ativa nesta página</div>
     </div>
+    <div class="site-count" id="siteCount" title="Bloqueado nesta página">0</div>
     <button class="act" id="siteToggle" data-i18n="allow">Permitir aqui</button>
   </section>
 
   <!-- ===== RODAPÉ ===== -->
   <footer class="foot">
     <div class="links">
-      <a href="#" id="linkStats" data-i18n="stats">Estatísticas</a>
+      <a href="#" id="linkTour" data-i18n="tour">Tour</a>
       <a href="#" id="linkSettings" data-i18n="settings">Configurações</a>
       <a href="#" id="linkAbout" data-i18n="about">Sobre</a>
     </div>
-    <div class="ver" id="verText">v1.1.0</div>
+    <div class="ver" id="verText">v1.2.0</div>
   </footer>
 
   <div id="toast" class="toast"></div>

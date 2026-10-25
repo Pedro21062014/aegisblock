@@ -173,6 +173,40 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     } else if (msg.type === "listUpdateNow") {
       const st = await runListUpdate(true);
       sendResponse({ ok: true, status: st });
+    } else if (msg.type === "openOptions") {
+      chrome.runtime.openOptionsPage().catch(() => {});
+      sendResponse({ ok: true });
+    } else if (msg.type === "openWelcome") {
+      chrome.tabs.create({ url: chrome.runtime.getURL("welcome/welcome.html") }).catch(() => {});
+      sendResponse({ ok: true });
+    } else if (msg.type === "closeSelf") {
+      if (sender.tab && sender.tab.id !== undefined) {
+        chrome.tabs.remove(sender.tab.id).catch(() => {});
+      }
+      sendResponse({ ok: true });
+    } else if (msg.type === "getPageData") {
+      // dados REAIS da página atual + fatos da lista
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        let tabCount = 0;
+        let domain = "";
+        let whitelisted = false;
+        if (tab && tab.id !== undefined) {
+          const badge = await chrome.action.getBadgeText({ tabId: tab.id });
+          tabCount = parseInt(badge || "0", 10) || 0;
+          if (tab.url) {
+            try {
+              const u = new URL(tab.url);
+              if (u.protocol.startsWith("http")) domain = u.hostname.replace(/^www\./, "");
+            } catch (e) {}
+          }
+          const { settings } = await getState();
+          whitelisted = (settings.whitelist || []).includes(domain);
+        }
+        sendResponse({ ok: true, tabCount, domain, whitelisted });
+      } catch (e) {
+        sendResponse({ ok: true, tabCount: 0, domain: "", whitelisted: false });
+      }
     }
   })();
   return true; // resposta assíncrona
@@ -194,7 +228,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     });
   } catch (e) {}
   if (details && details.reason === "install") {
-    await chrome.tabs.create({ url: "https://aegisblock.app/welcome" }).catch(() => {});
+    // abre a página local de boas-vindas + tour
+    await chrome.tabs
+      .create({ url: chrome.runtime.getURL("welcome/welcome.html") })
+      .catch(() => {});
   }
   // agenda a atualização automática da lista (padrão: a cada 5 h)
   await applyUpdatePolicy();

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="version" src="https://img.shields.io/badge/version-1.1.0-2edc96?style=flat-square" />
+  <img alt="version" src="https://img.shields.io/badge/version-1.2.0-2edc96?style=flat-square" />
   <img alt="urls" src="https://img.shields.io/badge/blocklist-150.099%20URLs-4aa8ff?style=flat-square" />
   <img alt="langs" src="https://img.shields.io/badge/languages-12-8b7cff?style=flat-square" />
   <img alt="license" src="https://img.shields.io/badge/license-MIT-ffc857?style=flat-square" />
@@ -36,6 +36,7 @@
 ```
 aegisblock/
 ├── manifest.json               # MV3 + declarativeNetRequest
+├── welcome/                    # boas-vindas local + tour guiado (5 passos)
 ├── background/
 │   ├── service-worker.js       # estatísticas (getMatchedRules) + badge
 │   ├── list-updater.js         # atualização automática via arquivo raw
@@ -49,10 +50,11 @@ aegisblock/
 │   ├── curated_urls.json       # prioridade 50 (URLs curadas)
 │   ├── bulk_01..06.json        # prioridade 10 (URLs geradas)
 │   └── domains.json            # prioridade 5 (35.446 hosts)
-├── popup/                      # UI com animação Lottie + estatísticas
-├── options/                    # página de configurações
+├── popup/                      # UI com animação Lottie + dados reais
+├── options/                    # painel de configurações + atualização de listas
 ├── data/
 │   ├── blocklist_urls.txt      # as 150.099 URLs (legível)
+│   ├── facts.json              # métricas REAIS exibidas na interface
 │   ├── hosts_catalog.json      # host → categoria
 │   └── rule_index.json
 ├── lib/lottie_svg.min.js       # player Lottie (SVG)
@@ -66,13 +68,23 @@ aegisblock/
 2. Abra `chrome://extensions`
 3. Ative o **Modo do desenvolvedor** (canto superior direito)
 4. Clique em **Carregar sem compactação** e selecione a pasta `aegisblock/`
-5. Pronto! O ícone do escudo 🛡️ aparece na barra de ferramentas
+5. Na primeira instalação abre a **página de boas-vindas com tour guiado**
 
 > **Firefox:** `about:debugging` → *This Firefox* → *Load Temporary Add-on* → selecione `manifest.json`.
 
-## 🖥️ Interface
+## 👋 Boas-vindas + Tour
 
-A animação de segurança (cadeado Lottie) é exibida no popup e na página de configurações para indicar que a proteção está ativa. Você também pode abrir `preview.html` no navegador para ver a interface completa sem instalar a extensão.
+Na primeira instalação, a extensão abre `welcome/welcome.html` (arquivo local):
+página profissional com animação de segurança, números reais da lista, recursos e um
+**tour guiado em 5 passos** (com barra de progresso, navegação e atalho para as configurações).
+
+## 🖥️ Interface (dados reais)
+
+Animação Lottie de proteção (cadeado) com anéis orbitais · estatísticas **reais**
+(bloqueios medidos, nunca inventados) · donut com a composição real da lista
+(**97.443** anúncios · **37.056** rastreadores · **15.600** ameaças) · contador
+**por página** · gráfico de 7 dias · status da sincronização remota.
+`preview.html` e `preview-welcome.html` mostram tudo offline, sem instalar.
 
 ## 🛡️ Como o YouTube é protegido (sem quebrar nada)
 

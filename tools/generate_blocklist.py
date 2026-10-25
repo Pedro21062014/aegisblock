@@ -777,6 +777,27 @@ print(f"Regras curated_urls .......... {len(exact_rules)}")
 print(f"Regras URL geradas ........... {(rid_ads-10000)+(rid_track-200000)+(rid_mal-300000)}")
 print(f"Regras de domínio ............ {len(dom_rules)}")
 
+# fatos reais para a interface (popup / boas-vindas)
+url_cat_count = {"ads": 0, "trackers": 0, "malware": 0}
+for u, c in final_urls:
+    url_cat_count[c] = url_cat_count.get(c, 0) + 1
+facts = {
+    "urls": len(final_urls),
+    "urlsAds": url_cat_count["ads"],
+    "urlsTrackers": url_cat_count["trackers"],
+    "urlsMalware": url_cat_count["malware"],
+    "hosts": len(hosts_cat),
+    "hostsAds": len(cat_hosts.get("ads", [])),
+    "hostsTrackers": len(cat_hosts.get("trackers", [])),
+    "hostsMalware": len(cat_hosts.get("malware", [])),
+    "curatedDomains": len(SEEDS),
+    "rules": len(yt_rules) + len(exact_rules) + (rid_ads - 10000) + (rid_track - 200000) + (rid_mal - 300000) + len(dom_rules),
+    "languages": 12,
+}
+with open(os.path.join(DATA, "facts.json"), "w", encoding="utf-8") as f:
+    json.dump(facts, f, indent=2)
+print(f"data/facts.json .............. atualizado")
+
 # ---------------------------------------------------------------------------
 # 6. VERIFICAÇÃO DE SEGURANÇA — nada de domínios essenciais na lista
 # ---------------------------------------------------------------------------
