@@ -1,13 +1,13 @@
 {
   "urls": 230117,
-  "urlsAds": 188136,
-  "urlsTrackers": 14681,
+  "urlsAds": 185616,
+  "urlsTrackers": 17201,
   "urlsMalware": 27300,
-  "hosts": 47311,
-  "hostsAds": 26868,
+  "hosts": 46951,
+  "hostsAds": 26508,
   "hostsTrackers": 16543,
   "hostsMalware": 3900,
-  "curatedDomains": 789,
-  "rules": 230266,
+  "curatedDomains": 783,
+  "rules": 230261,
   "languages": 12
 }

@@ -3,7 +3,7 @@
 """
 AegisBlock - Gerador de Lista de Bloqueio (150.000+ URLs)
 =========================================================
-Gera a base de bloqueio da extensão a partir de uma semente CURADA de
+Gera a base de bloqueio (230.000+ URLs) a partir de uma semente CURADA de
 redes de anúncios, rastreadores e domínios de malvertising conhecidos.
 
 Estratégia anti-falso-positivo:
@@ -305,7 +305,7 @@ add("ads",
     "kiosked.com", "readpeak.com", "sunmedia.tv", "imonomy.com", "coull.com",
     "stroeerdigitalmedia.de", "smartstream.tv", "bidscube.com", "epom.com",
     "epommarket.com", "admanmedia.com", "adkernel.com", "serverbid.com",
-    "defydia.com", "simpli.fi", "lijitnetwork.com", "ap.lijit.com",
+    "simpli.fi", "lijitnetwork.com", "ap.lijit.com",
     "beeswax.com", "bidtellect.com", "brealtime.com", "bidtheatre.com",
     "richaudience.com", "smilewanted.com", "liquidm.com", "sojern.com",
     "adara.io", "zetaglobal.net", "permutive.com", "id5-sync.com",
@@ -315,7 +315,7 @@ add("ads",
     "applovin.net", "inmobi.net", "vungle.net", "chartboost.net",
     "tapjoyads.com", "ironsource.net", "supersonicads.com", "fyber.net",
     "mintegral.net", "appnext.net", "startappservice.com", "digitalturbine.com",
-    "tapcore.net", "pangle.io", "ads1.mopub.com", "adserver.adtech.de",
+    "tapcore.net", "pangle.io", "adserver.adtech.de",
     "adspirit.net", "adscale.de", "adsafety.net", "adsafety.org",
     "sascdn.com", "smartadserver.net", "stickyadstv.com", "vidoomy.com",
     "aniview.net", "springserve.com", "beachfront.com", "lkqd.net",
@@ -437,6 +437,13 @@ EXCLUDE = {
     "xandr.com", "appnexus.com", "mopub.com", "klaviyo.com", "braze.com",
     "bazaarvoice.com", "yotpo.com", "posthog.com", "logrocket.com",
     "bloomreach.com", "trustpilot.com", "adobedtm.com",
+    # v1.3.1 — players de VÍDEO DE CONTEÚDO (bloquear = quebrar vídeos em
+    # sites de notícias/portais; são monetizados mas hospedam conteúdo)
+    "connatix.com", "ex.co", "anyclip.com", "vidazoo.com",
+    "jwplayer.com", "jwpsrv.com", "jwpcdn.com", "content.jwplatform.com",
+    "brightcove.com", "vimeo.com", "dailymotion.com",
+    # v1.3.1 — domínios mortos/inventados que não devem estar na lista
+    "defydia.com", "ads1.mopub.com", "mopub.com",
 }
 SEEDS = {d: c for d, c in SEEDS.items() if d not in EXCLUDE}
 
@@ -618,8 +625,12 @@ for dom, cat in seed_items:
 
 # URLs exatas primeiro (sempre no topo do arquivo e com IDs menores)
 exact_urls = []
+_seen_exact = set()
 for cat in ("ads", "trackers"):
     for u in EXACT_URLS[cat]:
+        if u in _seen_exact:
+            continue
+        _seen_exact.add(u)
         # IMPORTANTE: NÃO adiciona o host da URL exata a hosts_cat.
         # Esses hosts podem ser domínios compartilhados/funcionais
         # (ex.: www.youtube.com, connect.facebook.net, s.pinimg.com) e o
@@ -800,7 +811,7 @@ def flush_batch():
     file_idx += 1
 
 for u, c in final_urls:
-    if u in dict(exact_urls):
+    if u in _seen_exact:
         continue  # já coberta
     if c == "ads":
         r = make_rule(rid_ads, u, c, 10); rid_ads += 1

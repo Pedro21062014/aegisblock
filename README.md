@@ -21,7 +21,7 @@
 
 | Recurso | Descrição |
 |---|---|
-| 🚫 **Bloqueio em 230.117 URLs** | Lista gerada a partir de **789 domínios curados** de redes de anúncios, rastreadores e malvertising (DoubleClick, Criteo, Taboola, AppNexus, Outbrain, etc.) + **47.311 hosts** com variações de subdomínio e caminhos |
+| 🚫 **Bloqueio em 230.117 URLs** | Lista gerada a partir de **783 domínios curados** de redes de anúncios, rastreadores e malvertising (DoubleClick, Criteo, Taboola, AppNexus, Outbrain, etc.) + **46.951 hosts** com variações de subdomínio e caminhos |
 | 🔄 **Atualização automática da lista** | A cada **5 horas** (intervalo configurável: 1h a 48h ou manual), a extensão baixa o arquivo raw do GitHub e aplica as mudanças **sem atualizar a extensão**: URLs novas → bloqueio imediato; URLs removidas → exceção automática (corrige falsos positivos) |
 | ▶️ **Escudo YouTube** | Remove `adPlacements` / `playerAds` das respostas do player **sem bloquear o vídeo** — sem travamentos, sem "ad blocker detected" |
 | 🎯 **Zero falso-positivo** | Apenas domínios de ad-tech são usados como semente; domínios de conteúdo (seu banco, sua loja, seu streaming) nunca entram na lista |
@@ -45,11 +45,11 @@ aegisblock/
 │   ├── main-world.js           # escudo YouTube (mundo MAIN)
 │   ├── cosmetic.js             # filtros cosméticos conservadores
 │   └── hide.css
-├── rules/                      # ~150.100 regras declarativeNetRequest
+├── rules/                      # ~230.260 regras declarativeNetRequest
 │   ├── youtube_fix.json        # prioridade 100 (YouTube/Google ads)
 │   ├── curated_urls.json       # prioridade 50 (URLs curadas)
 │   ├── bulk_01..06.json        # prioridade 10 (URLs geradas)
-│   └── domains.json            # prioridade 5 (47.311 hosts)
+│   └── domains.json            # prioridade 5 (46.951 hosts)
 ├── popup/                      # UI com animação Lottie + dados reais
 ├── options/                    # painel de configurações + atualização de listas
 ├── data/
@@ -82,7 +82,7 @@ página profissional com animação de segurança, números reais da lista, recu
 
 Animação Lottie de proteção (cadeado) com anéis orbitais · estatísticas **reais**
 (bloqueios medidos, nunca inventados) · donut com a composição real da lista
-(**188.136** anúncios · **14.681** rastreadores · **27.300** ameaças) · contador
+(**185.616** anúncios · **17.201** rastreadores · **27.300** ameaças) · contador
 **por página** · gráfico de 7 dias · status da sincronização remota.
 `preview.html` e `preview-welcome.html` mostram tudo offline, sem instalar.
 
@@ -131,7 +131,7 @@ Contagens em tempo real via `declarativeNetRequest.getMatchedRules`:
 
 Gerada por `tools/generate_blocklist.py` a partir de:
 
-- **789 domínios curados** de ad-tech real (Google Ads/DoubleClick, Criteo, Taboola, Outbrain, PubMatic, Rubicon, AppNexus, AdRoll, Teads, Amazon Ads, Unity Ads, AppLovin, ironSource, Moat, ScorecardResearch, Hotjar, etc.)
+- **783 domínios curados** de ad-tech real (Google Ads/DoubleClick, Criteo, Taboola, Outbrain, PubMatic, Rubicon, AppNexus, AdRoll, Teads, Amazon Ads, Unity Ads, AppLovin, ironSource, Moat, ScorecardResearch, Hotjar, etc.)
 - **47 prefixos de subdomínio** (`ads.`, `track.`, `pixel.`, `sync.`, `rtb.` …)
 - **50 caminhos típicos** de anúncio/rastreamento (`/banner.gif`, `/pixel.gif`, `/vast.xml`, `/tag.js` …)
 - Variações regionais do Google Ads (`adservice.google.*` em ~180 TLDs)

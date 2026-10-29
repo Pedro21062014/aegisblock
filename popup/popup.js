@@ -342,8 +342,8 @@
       FACTS = await resp.json();
     } catch (e) {
       FACTS = {
-        urls: 230117, urlsAds: 188136, urlsTrackers: 14681, urlsMalware: 27300,
-        hosts: 47311, curatedDomains: 789, rules: 230266, languages: 12,
+        urls: 230117, urlsAds: 185616, urlsTrackers: 17201, urlsMalware: 27300,
+        hosts: 46951, curatedDomains: 783, rules: 230261, languages: 12,
       };
     }
     return FACTS;

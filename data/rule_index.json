@@ -43,9 +43,9 @@
   ],
   "counts": {
     "urls": 230117,
-    "hosts": 47311,
-    "curated_domains": 789,
-    "url_rules": 230170,
+    "hosts": 46951,
+    "curated_domains": 783,
+    "url_rules": 230165,
     "domain_rules": 96
   }
 }
