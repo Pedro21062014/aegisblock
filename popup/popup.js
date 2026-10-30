@@ -237,6 +237,24 @@
     "ar": { since: "منذ التفعيل", headlineOn: "درع الإعلانات نشط", headlineOff: "الدرع معطل", totalBlocked: "إجمالي المحظور", onThisPage: "في هذه الصفحة", list: "قائمة الحظر", listUrls: "رابط", chartEmpty: "ستظهر بيانات الحماية هنا", tour: "جولة", ago: "منذ {x}", waiting: "في انتظار أول مزامنة" },
     "hi": { since: "सक्रियण के बाद से", headlineOn: "विज्ञापन शील्ड सक्रिय", headlineOff: "शील्ड अक्षम", totalBlocked: "कुल अवरुद्ध", onThisPage: "इस पेज पर", list: "ब्लॉक सूची", listUrls: "URL", chartEmpty: "आपका सुरक्षा डेटा यहाँ दिखेगा", tour: "टूर", ago: "{x} पहले", waiting: "पहली सिंक की प्रतीक्षा" },
   };
+  const CHART_COPY = {
+    "en": { weekDescription: "Daily ads, trackers and threats blocked", weekBlocked: "blocked", distributionTitle: "Blocklist composition", distributionSubtitle: "Share of URLs by category" },
+    "pt-BR": { weekDescription: "Volume diário de anúncios, rastreadores e ameaças bloqueados", weekBlocked: "bloqueios", distributionTitle: "Distribuição da lista", distributionSubtitle: "Proporção de URLs por categoria" },
+    "es": { weekDescription: "Bloqueos diarios de anuncios, rastreadores y amenazas", weekBlocked: "bloqueos", distributionTitle: "Distribución de la lista", distributionSubtitle: "Proporción de URL por categoría" },
+    "fr": { weekDescription: "Annonces, traceurs et menaces bloqués par jour", weekBlocked: "bloqués", distributionTitle: "Répartition de la liste", distributionSubtitle: "Part des URL par catégorie" },
+    "de": { weekDescription: "Täglich blockierte Werbung, Tracker und Bedrohungen", weekBlocked: "blockiert", distributionTitle: "Zusammensetzung der Liste", distributionSubtitle: "URL-Anteil nach Kategorie" },
+    "it": { weekDescription: "Annunci, tracker e minacce bloccati ogni giorno", weekBlocked: "bloccati", distributionTitle: "Composizione della lista", distributionSubtitle: "Quota di URL per categoria" },
+    "ja": { weekDescription: "広告・トラッカー・脅威の1日ごとのブロック数", weekBlocked: "ブロック", distributionTitle: "ブロックリストの内訳", distributionSubtitle: "カテゴリ別URLの割合" },
+    "zh-CN": { weekDescription: "每天拦截的广告、跟踪器和威胁", weekBlocked: "次拦截", distributionTitle: "拦截列表构成", distributionSubtitle: "按类别划分的 URL 占比" },
+    "ru": { weekDescription: "Ежедневно заблокированные реклама, трекеры и угрозы", weekBlocked: "блокировок", distributionTitle: "Состав списка блокировки", distributionSubtitle: "Доля URL по категориям" },
+    "ko": { weekDescription: "일별 광고·추적기·위협 차단 수", weekBlocked: "차단", distributionTitle: "차단 목록 구성", distributionSubtitle: "범주별 URL 비율" },
+    "ar": { weekDescription: "الإعلانات وأدوات التتبع والتهديدات المحظورة يوميًا", weekBlocked: "عمليات حظر", distributionTitle: "توزيع قائمة الحظر", distributionSubtitle: "نسبة الروابط حسب الفئة" },
+    "hi": { weekDescription: "प्रतिदिन अवरुद्ध विज्ञापन, ट्रैकर और खतरे", weekBlocked: "अवरुद्ध", distributionTitle: "ब्लॉकलिस्ट का विवरण", distributionSubtitle: "श्रेणी के अनुसार URL का हिस्सा" },
+  };
+  for (const [code, copy] of Object.entries(CHART_COPY)) {
+    if (EXTRA[code]) Object.assign(EXTRA[code], copy);
+  }
+
   for (const code of Object.keys(EXTRA)) {
     if (I18N[code]) Object.assign(I18N[code], EXTRA[code]);
   }
@@ -367,11 +385,23 @@
     set("dnTrk", seg(trk), seg(ads));
     set("dnMal", seg(mal), seg(ads) + seg(trk));
 
+    const pct = (value) => {
+      try {
+        return new Intl.NumberFormat(lang, { style: "percent", maximumFractionDigits: 1 }).format(value / total);
+      } catch (e) {
+        return `${Math.round((value / total) * 100)}%`;
+      }
+    };
+    document.getElementById("donut").setAttribute("aria-label", `${t("distributionTitle")}: ${t("ads")} ${pct(ads)}, ${t("trackers")} ${pct(trk)}, ${t("malware")} ${pct(mal)}`);
     document.getElementById("donutN").textContent =
       facts.urls >= 1000 ? `${Math.round(facts.urls / 1000)}K` : fmt(facts.urls);
     document.getElementById("lnAds").textContent = fmt(ads);
     document.getElementById("lnTrk").textContent = fmt(trk);
     document.getElementById("lnMal").textContent = fmt(mal);
+    document.getElementById("lnAdsPct").textContent = pct(ads);
+    document.getElementById("lnTrkPct").textContent = pct(trk);
+    document.getElementById("lnMalPct").textContent = pct(mal);
+    document.body.classList.remove("facts-loading");
   }
 
   // ------------------------------------------------------------------
@@ -462,42 +492,62 @@
     };
     const labels = dayLabels[lang] || dayLabels.en;
 
-    // preenche os 7 dias (mesmo sem dados — barras mínimas discretas)
+    // Preenche os 7 dias com barras empilhadas e trilhas visuais de referência.
     const today = new Date();
+    bars.setAttribute("aria-label", t("weekDescription"));
     for (let i = 6; i >= 0; i--) {
       const date = new Date(today.getTime() - i * 86400000);
       const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
       const d = days[key] || {};
+      const dayTotal = (d.ads || 0) + (d.trackers || 0) + (d.malware || 0);
       const col = document.createElement("div");
       col.className = "col";
+      col.setAttribute("role", "group");
+      if (i === 0) col.classList.add("today");
+
+      const track = document.createElement("div");
+      track.className = "bar-track";
+      track.setAttribute("aria-hidden", "true");
       const mk = (cls, val) => {
         if (val <= 0 && weekTotal > 0) return;
         const segEl = document.createElement("div");
         segEl.className = "seg " + cls;
-        segEl.style.height = `${Math.max(2, (val / max) * 46)}px`;
-        if (val > 0 || weekTotal === 0) col.appendChild(segEl);
+        segEl.style.height = `${Math.max(2, (val / max) * 56)}px`;
+        if (val > 0 || weekTotal === 0) track.appendChild(segEl);
       };
       if (weekTotal === 0) {
         const ghost = document.createElement("div");
         ghost.className = "seg a";
         ghost.style.height = "3px";
-        ghost.style.opacity = "0.25";
-        col.appendChild(ghost);
+        ghost.style.opacity = "0.28";
+        track.appendChild(ghost);
       } else {
         mk("m", d.malware || 0);
         mk("t", d.trackers || 0);
         mk("a", d.ads || 0);
       }
+      col.appendChild(track);
+
       const lbl = document.createElement("div");
       lbl.className = "lbl";
       lbl.textContent = labels[date.getDay()] || "";
       col.appendChild(lbl);
-      col.title = `${key}: ${fmt((d.ads || 0) + (d.trackers || 0) + (d.malware || 0))}`;
+      col.title = `${key} — ${fmt(dayTotal)}
+${t("ads")}: ${fmt(d.ads || 0)}
+${t("trackers")}: ${fmt(d.trackers || 0)}
+${t("malware")}: ${fmt(d.malware || 0)}`;
+      col.setAttribute("aria-label", col.title.replace(/\n/g, ", "));
       bars.appendChild(col);
     }
 
     // rodapé
-    document.getElementById("verText").textContent = `v1.3.0`;
+    let ver = "1.4.0";
+    try {
+      if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest) {
+        ver = chrome.runtime.getManifest().version || ver;
+      }
+    } catch (e) {}
+    document.getElementById("verText").textContent = `v${ver}`;
   }
 
   // ------------------------------------------------------------------
@@ -734,6 +784,48 @@
   }
 
   // ------------------------------------------------------------------
+  // Skeleton de carregamento das estatísticas
+  // ------------------------------------------------------------------
+  function finishStatsLoading() {
+    document.body.classList.remove("stats-loading");
+  }
+
+  function requestInitialStats() {
+    if (!isExt) {
+      // No HTML standalone não existe service worker; mantém o placeholder por um
+      // breve instante para que a transição de carregamento possa ser percebida.
+      window.setTimeout(finishStatsLoading, 420);
+      return;
+    }
+
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(fallback);
+      finishStatsLoading();
+    };
+    const fallback = window.setTimeout(finish, 1800);
+
+    try {
+      chrome.runtime.sendMessage({ type: "getStats" }, (res) => {
+        if (chrome.runtime.lastError) {
+          finish();
+          return;
+        }
+        if (res && res.stats) {
+          writeStorage("stats", res.stats);
+          if (res.settings) writeStorage("settings", res.settings);
+          render();
+        }
+        finish();
+      });
+    } catch (e) {
+      finish();
+    }
+  }
+
+  // ------------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------------
   async function boot() {
@@ -749,6 +841,7 @@
     langEl.value = lang;
     bind();
     render();
+    requestInitialStats();
 
     // dados reais
     const facts = await loadFacts();
@@ -782,3 +875,4 @@
     boot();
   }
 })();
+
