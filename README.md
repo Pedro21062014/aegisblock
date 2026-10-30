@@ -88,11 +88,26 @@ Animação Lottie de proteção (cadeado) com anéis orbitais · estatísticas *
 
 ## 🛡️ Como o YouTube é protegido (sem quebrar nada)
 
-1. `content/main-world.js` roda em `document_start` no mundo MAIN
-2. Intercepta `ytInitialPlayerResponse`, `fetch` e `XHR` do player
-3. Remove somente os campos publicitários (`adPlacements`, `playerAds`, `adSlots`, `adBreakHeartbeatParams`)
-4. **Nunca** bloqueia requisições de mídia do `googlevideo.com` — o vídeo toca normalmente
-5. Pula automaticamente anúncios que escaparem e oculta overlays
+O `content/main-world.js` (v3) roda em `document_start` no mundo MAIN e
+**modifica o próprio código do site** em 3 camadas:
+
+1. **Requisição** — o corpo do `POST /youtubei/v1/player` é reescrito antes de
+   sair (sinais de anúncio removidos): o servidor nem agenda o anúncio
+2. **Resposta/código** — `fetch`, `XMLHttpRequest`, `JSON.parse`,
+   `ytInitialPlayerResponse`, `ytInitialData` e `ytplayer.config.args` são
+   interceptados e as respostas são **sanitizadas em profundidade**
+   (`adPlacements`, `playerAds`, `adSlots`, `adServingData`, `adSlotRenderer`…):
+   o anúncio nunca chega ao player
+3. **Player** — se algo escapar, o código do player é usado contra o anúncio:
+   clique automático no "Pular anúncio", salto pela API oficial (somente
+   durante o anúncio) e, por fim, aceleração silenciosa (16×, mudo) com
+   restauração **exata** do estado original do vídeo
+
+**Regras de ouro (anti-falso-positivo):**
+- **Nunca** toca no vídeo de conteúdo — `googlevideo.com`/`ytimg.com` intocados, nenhum seek no conteúdo
+- **Nunca** esconde o botão "Pular anúncio" (a limpeza de overlays verifica antes)
+- Ações de salto apenas com **certeza** de anúncio (`getAdState()===1` e/ou marcadores DOM)
+- Rede complementar: 54 regras prioritárias (`rules/youtube_fix.json`) bloqueando `pagead`, `ptracking`, `get_midroll_info`, `_get_ads`, `player/ad_break`, `pcs/activeview` em `www`, `m` e `music.youtube.com`
 
 ## 🔄 Atualização automática da lista (sem reinstalar a extensão)
 
