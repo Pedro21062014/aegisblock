@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AegisBlock — manifesto de atualização do Chrome (update_url)
+
+  Usado pelo canal OFICIAL de atualização do Chrome: quando a extensão é
+  instalada via pacote .crx (ou política de extensão externa), o Chrome
+  consulta este arquivo periodicamente e, se a versão aqui for maior que a
+  instalada, baixa e substitui TODA a extensão automaticamente.
+
+  Publicando uma versão nova (mantenedor):
+   1. Gere um par de chaves e o .crx assinado (ex.: crx3 / dev CLI);
+   2. Substitua EXTENSION_ID abaixo pelo ID derivado da chave pública;
+   3. Suba o .crx em Releases e aponte o codebase para ele;
+   4. Atualize o atributo version para a versão publicada.
+
+  Observação: extensões carregadas como "sem compactação" (modo desenvolvedor)
+  não usam este canal — o botão "Atualizar" dentro da extensão cobre esse caso
+  (atualiza os dados na hora e baixa o pacote mais recente do GitHub).
+-->
+<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">
+  <app appid="EXTENSION_ID">
+    <updatecheck
+      codebase="https://github.com/Pedro21062014/aegisblock/releases/latest/download/aegisblock.crx"
+      version="1.5.0" />
+  </app>
+</gupdate>

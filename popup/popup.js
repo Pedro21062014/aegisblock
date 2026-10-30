@@ -255,6 +255,24 @@
     if (EXTRA[code]) Object.assign(EXTRA[code], copy);
   }
 
+  const UPDATE_COPY = {
+    "en": { updateTitle: "New version available", updateSub: "Update to v{x} from GitHub", updateBtn: "Update", updateChecking: "Checking…", updateDone: "Updating… the extension will reload", updateManual: "Package downloaded! Unzip it and reload the extension in chrome://extensions", updateError: "Could not check for updates now" },
+    "pt-BR": { updateTitle: "Nova versão disponível", updateSub: "Atualize para a v{x} do GitHub", updateBtn: "Atualizar", updateChecking: "Verificando…", updateDone: "Atualizando… a extensão vai recarregar", updateManual: "Pacote baixado! Descompacte e recarregue a extensão em chrome://extensions", updateError: "Não foi possível verificar agora" },
+    "es": { updateTitle: "Nueva versión disponible", updateSub: "Actualiza a la v{x} desde GitHub", updateBtn: "Actualizar", updateChecking: "Verificando…", updateDone: "Actualizando… la extensión se recargará", updateManual: "¡Paquete descargado! Descomprímelo y recarga la extensión en chrome://extensions", updateError: "No se pudo verificar ahora" },
+    "fr": { updateTitle: "Nouvelle version disponible", updateSub: "Mettez à jour vers la v{x} depuis GitHub", updateBtn: "Mettre à jour", updateChecking: "Vérification…", updateDone: "Mise à jour… l'extension va se recharger", updateManual: "Paquet téléchargé ! Décompressez-le et rechargez l'extension dans chrome://extensions", updateError: "Impossible de vérifier maintenant" },
+    "de": { updateTitle: "Neue Version verfügbar", updateSub: "Auf v{x} von GitHub aktualisieren", updateBtn: "Aktualisieren", updateChecking: "Prüfe…", updateDone: "Aktualisiere… die Erweiterung wird neu geladen", updateManual: "Paket heruntergeladen! Entpacken und die Erweiterung in chrome://extensions neu laden", updateError: "Prüfung derzeit nicht möglich" },
+    "it": { updateTitle: "Nuova versione disponibile", updateSub: "Aggiorna alla v{x} da GitHub", updateBtn: "Aggiorna", updateChecking: "Verifica…", updateDone: "Aggiornamento… l'estensione si ricaricherà", updateManual: "Pacchetto scaricato! Decomprimilo e ricarica l'estensione in chrome://extensions", updateError: "Impossibile verificare ora" },
+    "ja": { updateTitle: "新しいバージョンがあります", updateSub: "GitHubのv{x}に更新", updateBtn: "更新", updateChecking: "確認中…", updateDone: "更新中…拡張機能を再読み込みします", updateManual: "パッケージをダウンロードしました。解凍してchrome://extensionsで再読み込みしてください", updateError: "今は確認できません" },
+    "zh-CN": { updateTitle: "有新版本可用", updateSub: "更新到 GitHub 的 v{x}", updateBtn: "更新", updateChecking: "检查中…", updateDone: "更新中…扩展将重新加载", updateManual: "已下载安装包！解压后在 chrome://extensions 重新加载扩展", updateError: "暂时无法检查" },
+    "ru": { updateTitle: "Доступна новая версия", updateSub: "Обновите до v{x} с GitHub", updateBtn: "Обновить", updateChecking: "Проверка…", updateDone: "Обновление… расширение перезагрузится", updateManual: "Пакет загружен! Распакуйте и перезагрузите расширение в chrome://extensions", updateError: "Не удалось проверить сейчас" },
+    "ko": { updateTitle: "새 버전이 있습니다", updateSub: "GitHub의 v{x}으로 업데이트", updateBtn: "업데이트", updateChecking: "확인 중…", updateDone: "업데이트 중… 확장 프로그램이 다시 로드됩니다", updateManual: "패키지 다운로드됨! 압축을 풀고 chrome://extensions에서 다시 로드하세요", updateError: "지금 확인할 수 없습니다" },
+    "ar": { updateTitle: "يتوفر إصدار جديد", updateSub: "حدّث إلى الإصدار v{x} من GitHub", updateBtn: "تحديث", updateChecking: "جارٍ التحقق…", updateDone: "جارٍ التحديث… سيتم إعادة تحميل الإضافة", updateManual: "تم تنزيل الحزمة! فكّ ضغطها وأعد تحميل الإضافة من chrome://extensions", updateError: "تعذّر التحقق الآن" },
+    "hi": { updateTitle: "नया संस्करण उपलब्ध है", updateSub: "GitHub से v{x} में अपडेट करें", updateBtn: "अपडेट करें", updateChecking: "जाँच हो रही है…", updateDone: "अपडेट हो रहा है… एक्सटेंशन पुनः लोड होगा", updateManual: "पैकेज डाउनलोड हुआ! अनज़िप करें और chrome://extensions में एक्सटेंशन पुनः लोड करें", updateError: "अभी जाँच नहीं हो सकी" },
+  };
+  for (const [code, copy] of Object.entries(UPDATE_COPY)) {
+    if (EXTRA[code]) Object.assign(EXTRA[code], copy);
+  }
+
   for (const code of Object.keys(EXTRA)) {
     if (I18N[code]) Object.assign(I18N[code], EXTRA[code]);
   }
@@ -541,13 +559,7 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
     }
 
     // rodapé
-    let ver = "1.4.1";
-    try {
-      if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest) {
-        ver = chrome.runtime.getManifest().version || ver;
-      }
-    } catch (e) {}
-    document.getElementById("verText").textContent = `v${ver}`;
+    document.getElementById("verText").textContent = `v${currentVer()}`;
   }
 
   // ------------------------------------------------------------------
@@ -771,16 +783,112 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
     });
     document.getElementById("linkAbout").addEventListener("click", (e) => {
       e.preventDefault();
-      alertDemo(`AegisBlock v1.3.0 — ${t("tagline")}`);
+      alertDemo(`AegisBlock v${currentVer()} — ${t("tagline")}`);
     });
+
+    const upBtn = document.getElementById("updateBtn");
+    if (upBtn) upBtn.addEventListener("click", applyExtensionUpdate);
   }
 
-  function alertDemo(msg) {
+  // ------------------------------------------------------------------
+  // Atualização da extensão (versão mais recente do GitHub)
+  // ------------------------------------------------------------------
+  const REPO_MANIFEST_URL =
+    "https://raw.githubusercontent.com/Pedro21062014/aegisblock/main/manifest.json";
+
+  function showUpdateBar(update) {
+    const sec = document.getElementById("updateSec");
+    if (!sec) return;
+    if (!update || !update.hasUpdate) {
+      sec.hidden = true;
+      return;
+    }
+    sec.hidden = false;
+    document.getElementById("updateTitle").textContent = t("updateTitle");
+    document.getElementById("updateSub").textContent =
+      t("updateSub").replace("{x}", "v" + (update.latest || "?"));
+    const btn = document.getElementById("updateBtn");
+    if (btn && !btn.disabled) btn.textContent = t("updateBtn");
+  }
+
+  function checkExtensionUpdate() {
+    if (isExt) {
+      try {
+        chrome.runtime.sendMessage({ type: "checkUpdate" }, (res) => {
+          if (res && res.ok) showUpdateBar(res.update);
+        });
+        return;
+      } catch (e) {}
+    }
+    // modo demo/preview: consulta o GitHub direto
+    fetch(REPO_MANIFEST_URL + "?t=" + Date.now(), { cache: "no-store" })
+      .then((r) => r.json())
+      .then((remote) => {
+        const latest = remote.version || "0";
+        const cur = currentVer();
+        const newer =
+          latest.split(".").map(Number).some((n, i) => n > (cur.split(".").map(Number)[i] || 0)) &&
+          latest !== cur;
+        showUpdateBar({ hasUpdate: newer, latest });
+      })
+      .catch(() => {});
+  }
+
+  function applyExtensionUpdate() {
+    const btn = document.getElementById("updateBtn");
+    const setBtn = (txt, disabled) => {
+      if (!btn) return;
+      btn.textContent = txt;
+      btn.disabled = disabled;
+    };
+    setBtn(t("updateChecking"), true);
+    const done = () => setBtn(t("updateBtn"), false);
+
+    if (!isExt) {
+      window.open("https://github.com/Pedro21062014/aegisblock", "_blank");
+      alertDemo(t("updateManual"), 4200);
+      done();
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage({ type: "applyUpdate" }, (res) => {
+        if (!res) {
+          alertDemo(t("updateError"));
+          done();
+          return;
+        }
+        if (res.reloading) {
+          alertDemo(t("updateDone"), 2600);
+          return; // a extensão recarrega sozinha na versão nova
+        }
+        // instalação descompactada: dados atualizados + pacote mais recente
+        try {
+          if (res.zipUrl) window.open(res.zipUrl, "_blank");
+        } catch (e) {}
+        alertDemo(t("updateManual"), 5200);
+        done();
+      });
+    } catch (e) {
+      alertDemo(t("updateError"));
+      done();
+    }
+  }
+
+  function currentVer() {
+    try {
+      if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest) {
+        return chrome.runtime.getManifest().version || "1.5.0";
+      }
+    } catch (e) {}
+    return "1.5.0";
+  }
+
+  function alertDemo(msg, ms) {
     const toast = document.getElementById("toast");
     toast.textContent = msg;
     toast.classList.add("show");
     clearTimeout(window.__toastT);
-    window.__toastT = setTimeout(() => toast.classList.remove("show"), 1800);
+    window.__toastT = setTimeout(() => toast.classList.remove("show"), ms || 1800);
   }
 
   // ------------------------------------------------------------------
@@ -848,6 +956,7 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
     renderDonut(facts);
     loadPageData();
     loadListStatus();
+    checkExtensionUpdate();
     loadLottie();
 
     // atualização ao vivo

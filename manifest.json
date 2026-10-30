@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_extName__",
   "description": "__MSG_extDesc__",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "default_locale": "en",
   "icons": {
     "16": "assets/icons/icon16.png",
@@ -34,29 +34,89 @@
     "declarativeNetRequest",
     "declarativeNetRequestFeedback"
   ],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "declarative_net_request": {
     "rule_resources": [
-      { "id": "youtube_fix", "enabled": true, "path": "rules/youtube_fix.json" },
-      { "id": "curated_urls", "enabled": true, "path": "rules/curated_urls.json" },
-      { "id": "bulk_01", "enabled": true, "path": "rules/bulk_01.json" },
-      { "id": "bulk_02", "enabled": true, "path": "rules/bulk_02.json" },
-      { "id": "bulk_03", "enabled": true, "path": "rules/bulk_03.json" },
-      { "id": "bulk_04", "enabled": true, "path": "rules/bulk_04.json" },
-      { "id": "bulk_05", "enabled": true, "path": "rules/bulk_05.json" },
-      { "id": "bulk_06", "enabled": true, "path": "rules/bulk_06.json" },
-      { "id": "bulk_07", "enabled": true, "path": "rules/bulk_07.json" },
-      { "id": "bulk_08", "enabled": true, "path": "rules/bulk_08.json" },
-      { "id": "bulk_09", "enabled": true, "path": "rules/bulk_09.json" },
-      { "id": "bulk_10", "enabled": true, "path": "rules/bulk_10.json" },
-      { "id": "domains", "enabled": true, "path": "rules/domains.json" }
+      {
+        "id": "youtube_fix",
+        "enabled": true,
+        "path": "rules/youtube_fix.json"
+      },
+      {
+        "id": "curated_urls",
+        "enabled": true,
+        "path": "rules/curated_urls.json"
+      },
+      {
+        "id": "bulk_01",
+        "enabled": true,
+        "path": "rules/bulk_01.json"
+      },
+      {
+        "id": "bulk_02",
+        "enabled": true,
+        "path": "rules/bulk_02.json"
+      },
+      {
+        "id": "bulk_03",
+        "enabled": true,
+        "path": "rules/bulk_03.json"
+      },
+      {
+        "id": "bulk_04",
+        "enabled": true,
+        "path": "rules/bulk_04.json"
+      },
+      {
+        "id": "bulk_05",
+        "enabled": true,
+        "path": "rules/bulk_05.json"
+      },
+      {
+        "id": "bulk_06",
+        "enabled": true,
+        "path": "rules/bulk_06.json"
+      },
+      {
+        "id": "bulk_07",
+        "enabled": true,
+        "path": "rules/bulk_07.json"
+      },
+      {
+        "id": "bulk_08",
+        "enabled": true,
+        "path": "rules/bulk_08.json"
+      },
+      {
+        "id": "bulk_09",
+        "enabled": true,
+        "path": "rules/bulk_09.json"
+      },
+      {
+        "id": "bulk_10",
+        "enabled": true,
+        "path": "rules/bulk_10.json"
+      },
+      {
+        "id": "domains",
+        "enabled": true,
+        "path": "rules/domains.json"
+      }
     ]
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content/cosmetic.js"],
-      "css": ["content/hide.css"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content/cosmetic.js"
+      ],
+      "css": [
+        "content/hide.css"
+      ],
       "run_at": "document_start",
       "all_frames": true,
       "match_about_blank": true
@@ -68,7 +128,9 @@
         "*://music.youtube.com/*",
         "*://www.youtube-nocookie.com/*"
       ],
-      "js": ["content/main-world.js"],
+      "js": [
+        "content/main-world.js"
+      ],
       "run_at": "document_start",
       "all_frames": true,
       "world": "MAIN"
@@ -76,8 +138,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content/inject.js"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "content/inject.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "browser_specific_settings": {
@@ -85,5 +151,6 @@
       "id": "aegisblock@example.com",
       "strict_min_version": "113.0"
     }
-  }
+  },
+  "update_url": "https://raw.githubusercontent.com/Pedro21062014/aegisblock/main/updates.xml"
 }

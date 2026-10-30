@@ -1883,3 +1883,72 @@ body[data-theme="light"] .bars .col.today .bar-track { box-shadow: inset 0 0 0 1
   .bar-track { transition: none !important; }
 }
 
+
+/* =====================================================================
+   Barra de atualização da extensão (nova versão no GitHub)
+   ===================================================================== */
+.update-sec { margin-top: 12px; }
+.update-bar {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 201, 92, 0.38);
+  background:
+    linear-gradient(170deg, rgba(255, 201, 92, 0.16), rgba(255, 201, 92, 0.05));
+}
+.update-bar .ub-ic {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  display: grid; place-items: center;
+  flex: none;
+  background: rgba(255, 201, 92, 0.16);
+  color: var(--amber, #ffc95c);
+}
+.update-bar .ub-ic svg { width: 17px; height: 17px; }
+.update-bar .ub-info { flex: 1; min-width: 0; }
+.update-bar .ub-t {
+  font-size: 11.5px;
+  font-weight: 750;
+  letter-spacing: -0.1px;
+  color: var(--txt, #eef4ff);
+}
+.update-bar .ub-s {
+  margin-top: 2px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.15px;
+  color: var(--txt-2, #96a7c6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ub-btn {
+  flex: none;
+  height: 31px;
+  padding: 0 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 201, 92, 0.55);
+  background: linear-gradient(170deg, rgba(255, 201, 92, 0.28), rgba(255, 201, 92, 0.12));
+  color: var(--amber, #ffc95c);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ub-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(255, 201, 92, 0.22); }
+.ub-btn:disabled { opacity: 0.55; cursor: wait; transform: none; }
+body[data-theme="light"] .update-bar {
+  border-color: rgba(217, 147, 39, 0.4);
+  background: linear-gradient(170deg, rgba(217, 147, 39, 0.12), rgba(217, 147, 39, 0.04));
+}
+body[data-theme="light"] .update-bar .ub-ic { background: rgba(217, 147, 39, 0.14); color: #d99327; }
+body[data-theme="light"] .ub-btn {
+  border-color: rgba(217, 147, 39, 0.5);
+  background: linear-gradient(170deg, rgba(217, 147, 39, 0.22), rgba(217, 147, 39, 0.1));
+  color: #a8711d;
+}

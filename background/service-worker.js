@@ -10,6 +10,11 @@ import {
   getListStatus,
   onListAlarm,
 } from "./list-updater.js";
+import {
+  checkForUpdate,
+  applyUpdate,
+  getUpdateState,
+} from "./app-updater.js";
 
 const DEFAULT_STATS = {
   ads: 0,
@@ -170,6 +175,16 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     } else if (msg.type === "getListStatus") {
       const st = await getListStatus();
       sendResponse({ ok: true, status: st });
+    } else if (msg.type === "checkUpdate") {
+      // compara a versão instalada com a do GitHub (manifest.json do repo)
+      const st = await checkForUpdate();
+      sendResponse({ ok: true, update: st });
+    } else if (msg.type === "getUpdateState") {
+      sendResponse({ ok: true, update: getUpdateState() });
+    } else if (msg.type === "applyUpdate") {
+      // atualiza TUDO: canal oficial do Chrome (completo) ou dados + pacote
+      const res = await applyUpdate();
+      sendResponse({ ok: true, ...res, update: getUpdateState() });
     } else if (msg.type === "listUpdateNow") {
       const st = await runListUpdate(true);
       sendResponse({ ok: true, status: st });
@@ -236,6 +251,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   }
   // agenda a atualização automática da lista (padrão: a cada 5 h)
   await applyUpdatePolicy();
+  // verificação de nova versão no GitHub (1ª após 30s e depois a cada 24h)
+  chrome.alarms.create("aegis-update-check", {
+    delayInMinutes: 0.5,
+    periodInMinutes: 1440,
+  });
 });
 
 chrome.runtime.onStartup.addListener(async () => {
@@ -246,12 +266,17 @@ chrome.runtime.onStartup.addListener(async () => {
   } catch (e) {}
   // verifica se a atualização está atrasada
   await applyUpdatePolicy();
+  chrome.alarms.create("aegis-update-check", {
+    delayInMinutes: 1,
+    periodInMinutes: 1440,
+  });
 });
 
 chrome.alarms.create("aegis-poll", { periodInMinutes: 0.25 });
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "aegis-poll") pollMatchedRules();
   else if (alarm.name === "aegis-list-update") onListAlarm();
+  else if (alarm.name === "aegis-update-check") checkForUpdate();
 });
 
 // badge reativo por aba

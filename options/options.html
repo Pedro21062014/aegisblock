@@ -462,10 +462,36 @@
         <h3><span class="ic a">✓</span> Sites permitidos (whitelist)</h3>
         <div class="whitelist" id="whitelist"><div class="wl-empty">Nenhum site na lista de exceções.</div></div>
       </div>
+
+      <!-- ATUALIZAÇÃO DA EXTENSÃO -->
+      <div class="card">
+        <h3><span class="ic g">🔄</span> Atualização da extensão</h3>
+        <div class="row">
+          <div class="lbl">
+            <b id="updTitle">Verificar nova versão</b>
+            <span id="updStatus">Compara a versão instalada com a mais recente do GitHub</span>
+          </div>
+          <button class="btn" id="btnUpdCheck">Verificar agora</button>
+        </div>
+        <div class="row" id="updApplyRow" hidden>
+          <div class="lbl">
+            <b>Nova versão disponível</b>
+            <span id="updNew">—</span>
+          </div>
+          <button class="btn primary" id="btnUpdApply">Atualizar</button>
+        </div>
+        <div class="row">
+          <div class="lbl">
+            <b>Repositório</b>
+            <span>Código-fonte, releases e lista de bloqueio</span>
+          </div>
+          <button class="btn" id="btnUpdGitHub">Abrir GitHub</button>
+        </div>
+      </div>
     </div>
 
     <footer>
-      AegisBlock v1.3.0 · <b>230.117</b> URLs embutidas · lista remota sincronizada automaticamente<br />
+      AegisBlock v1.5.0 · <b>230.117</b> URLs embutidas · lista remota sincronizada automaticamente<br />
       Privacidade: nenhum dado sai do seu navegador. Código aberto (MIT).
     </footer>
   </div>

@@ -109,6 +109,16 @@ O `content/main-world.js` (v3) roda em `document_start` no mundo MAIN e
 - Ações de salto apenas com **certeza** de anúncio (`getAdState()===1` e/ou marcadores DOM)
 - Rede complementar: 54 regras prioritárias (`rules/youtube_fix.json`) bloqueando `pagead`, `ptracking`, `get_midroll_info`, `_get_ads`, `player/ad_break`, `pcs/activeview` em `www`, `m` e `music.youtube.com`
 
+## 🚀 Botão de atualização da extensão
+
+A extensão tem um botão **Atualizar** (popup + Configurações → Atualização da extensão) que leva tudo para a **versão mais recente do GitHub** quando existe uma:
+
+1. **Verificação** — compara a `version` do `manifest.json` instalado com a do repositório (checagem automática no startup e a cada 24 h; o popup mostra a faixa "Nova versão disponível");
+2. **Atualizar agora**:
+   - **Instalação via .crx / canal oficial do Chrome** (`update_url` em `updates.xml`): `chrome.runtime.requestUpdateCheck()` + `reload()` — o Chrome **substitui a extensão inteira** pela versão nova;
+   - **Instalação "sem compactação" (desenvolvedor)**: o Chrome proíbe a extensão de reescrever os próprios arquivos em runtime — então o botão atualiza os **dados** na hora (lista + regras) e baixa o **pacote .zip mais recente** do GitHub, com instruções para recarregar em `chrome://extensions`;
+3. **Dados sempre frescos** independentemente disso: a lista de bloqueio se sincroniza sozinha com o repositório (padrão 5 h) — nem o botão é preciso para isso.
+
 ## 🔄 Atualização automática da lista (sem reinstalar a extensão)
 
 A extensão sincroniza a lista de bloqueio com o arquivo raw do repositório:

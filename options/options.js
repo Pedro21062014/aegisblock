@@ -335,3 +335,132 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
 })();
+
+// --------------------------------------------------------------------
+// Atualização da extensão (GitHub) — botão "Atualizar"
+// --------------------------------------------------------------------
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const isExt =
+    typeof chrome !== "undefined" && !!chrome.runtime && !!chrome.runtime.sendMessage;
+  const REPO_MANIFEST =
+    "https://raw.githubusercontent.com/Pedro21062014/aegisblock/main/manifest.json";
+  const REPO_ZIP =
+    "https://github.com/Pedro21062014/aegisblock/archive/refs/heads/main.zip";
+  const REPO_PAGE = "https://github.com/Pedro21062014/aegisblock";
+
+  function setStatus(msg) {
+    const el = $("updStatus");
+    if (el) el.textContent = msg;
+  }
+  function toastLong(msg) {
+    const el = $("toast");
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(window.__updT);
+    window.__updT = setTimeout(() => el.classList.remove("show"), 5200);
+  }
+
+  function handleUpdateState(u) {
+    if (!u) {
+      setStatus("Não foi possível verificar agora. Tente novamente.");
+      return;
+    }
+    if (u.error && !u.latest) {
+      setStatus("Erro ao verificar: " + u.error);
+      return;
+    }
+    if (u.hasUpdate) {
+      $("updApplyRow").hidden = false;
+      $("updNew").textContent = `v${u.latest} · instalada: v${u.current}`;
+      setStatus(`Nova versão v${u.latest} disponível — clique em Atualizar`);
+    } else {
+      $("updApplyRow").hidden = true;
+      setStatus(`Você já está na versão mais recente ✓ (v${u.current || "?"})`);
+    }
+  }
+
+  function check() {
+    setStatus("Verificando atualizações…");
+    if (isExt) {
+      try {
+        chrome.runtime.sendMessage({ type: "checkUpdate" }, (res) => {
+          handleUpdateState(res && res.update);
+        });
+        return;
+      } catch (e) {}
+    }
+    fetch(REPO_MANIFEST + "?t=" + Date.now(), { cache: "no-store" })
+      .then((r) => r.json())
+      .then((remote) => {
+        handleUpdateState({
+          latest: remote.version,
+          current: "1.5.0",
+          hasUpdate: String(remote.version) !== "1.5.0",
+        });
+      })
+      .catch(() => handleUpdateState(null));
+  }
+
+  function apply() {
+    const btn = $("btnUpdApply");
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Atualizando…";
+    }
+    const done = () => {
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Atualizar";
+      }
+    };
+    const manual = () => {
+      try {
+        window.open(REPO_ZIP, "_blank");
+      } catch (e) {}
+      toastLong(
+        "Pacote mais recente baixado! Descompacte e recarregue a extensão em chrome://extensions"
+      );
+      done();
+    };
+    if (!isExt) {
+      manual();
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage({ type: "applyUpdate" }, (res) => {
+        if (!res) {
+          toastLong("Falha ao atualizar — tente novamente");
+          done();
+          return;
+        }
+        if (res.reloading) {
+          toastLong("Atualizando… a extensão vai recarregar na versão nova");
+          return; // chrome.runtime.reload() cuida do resto
+        }
+        manual();
+      });
+    } catch (e) {
+      toastLong("Falha ao atualizar — tente novamente");
+      done();
+    }
+  }
+
+  function bootUpdate() {
+    const c = $("btnUpdCheck");
+    const a = $("btnUpdApply");
+    const g = $("btnUpdGitHub");
+    if (c) c.addEventListener("click", check);
+    if (a) a.addEventListener("click", apply);
+    if (g) g.addEventListener("click", () => window.open(REPO_PAGE, "_blank"));
+    check();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bootUpdate);
+  } else {
+    bootUpdate();
+  }
+})();
