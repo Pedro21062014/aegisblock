@@ -1961,6 +1961,30 @@ body[data-theme="light"] .ub-btn {
   color: #a8711d;
 }
 
+/* =====================================================================
+   FIX v1.5.2 — logo novo SEM caixa atrás (sobrescreve bloco premium)
+   ===================================================================== */
+.logo,
+body[data-theme="light"] .logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.logo svg { display: none; }
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 13px rgba(46, 230, 168, 0.18));
+}
+body[data-theme="light"] .logo img {
+  filter: drop-shadow(0 6px 13px rgba(14, 178, 124, 0.2));
+}
+
 </style>
 </head>
 <body class="stats-loading facts-loading">
