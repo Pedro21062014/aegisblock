@@ -39,13 +39,17 @@
   ]);
 
   // Itens de array que SÃO anúncios e devem ser removidos por completo
+  // (inclui renderers REAIS observados em respostas do YouTube)
   const AD_ITEM_RE = new RegExp(
     "^(adPlacementRenderer|adSlotRenderer|adBreakRenderer|" +
     "adBreakServiceRenderer|displayAdRenderer|promotedSparklesWebRenderer|" +
-    "promotedVideoRenderer|inFeedAdLayoutRenderer|merchShelfRenderer|" +
+    "promotedSparklesTextSearchRenderer|promotedVideoRenderer|" +
+    "inFeedAdLayoutRenderer|merchShelfRenderer|" +
     "statementBannerRenderer|bannerPromoRenderer|mastheadAdRenderer|" +
     "mealbarPromoRenderer|adRenderer|adCpnRenderer|playerAdRenderer|" +
-    "adSlotFulfillmentRenderer|adBreakFulfillmentRenderer)$"
+    "adSlotFulfillmentRenderer|adBreakFulfillmentRenderer|" +
+    "adsEngagementPanelContentRenderer|searchPyvRenderer|pyvRenderer|" +
+    "brandVideoShelfRenderer|primetimePromoRenderer)$"
   );
 
   function isAdItem(v) {
@@ -184,14 +188,17 @@
       }
       return send.apply(this, [body]);
     };
-    const desc = Object.getOwnPropertyDescriptor(
+    const descText = Object.getOwnPropertyDescriptor(
       XMLHttpRequest.prototype, "responseText"
     );
-    if (desc && desc.get) {
+    const descResp = Object.getOwnPropertyDescriptor(
+      XMLHttpRequest.prototype, "response"
+    );
+    if (descText && descText.get) {
       try {
         Object.defineProperty(xhr, "responseText", {
           get: function () {
-            const txt = desc.get.call(this);
+            const txt = descText.get.call(this);
             if (!isAdRelevantUrl(this.__aegisUrl) || typeof txt !== "string") {
               return txt;
             }
@@ -202,15 +209,30 @@
             }
           },
         });
+      } catch (e) {}
+    }
+    if (descResp && descResp.get) {
+      try {
         Object.defineProperty(xhr, "response", {
           get: function () {
-            if (
-              this.responseType && this.responseType !== "text" &&
-              this.responseType !== ""
-            ) {
-              return this.response;
+            const rt = this.responseType;
+            if (!rt || rt === "text") {
+              // getter já sanitizado acima
+              return this.responseText;
             }
-            return this.responseText;
+            if (rt === "json") {
+              const raw = descResp.get.call(this); // getter ORIGINAL (sem recursão)
+              if (raw && typeof raw === "object" && isAdRelevantUrl(this.__aegisUrl)) {
+                try {
+                  return cleanPayload(raw);
+                } catch (e) {
+                  return raw;
+                }
+              }
+              return raw;
+            }
+            // blob / arraybuffer / document — nunca tocamos
+            return descResp.get.call(this);
           },
         });
       } catch (e) {}
@@ -314,7 +336,9 @@
   }, 500);
 
   // ------------------------------------------------------------------
-  // 3) Player: matar o anúncio que escapou (sem tocar no conteúdo)
+  // 3) Player: APENAS clicar no botão "Pular anúncio" VISÍVEL.
+  //    NUNCA tocamos no <video>: sem seek, sem playbackRate, sem mudo.
+  //    (Qualquer mexida no vídeo causa travamento — regra inegociável.)
   // ------------------------------------------------------------------
   const SKIP_SELECTORS = [
     "button.ytp-ad-skip-button",
@@ -329,18 +353,6 @@
     ".ytp-skip-button button",
   ];
 
-  const AD_DOM_MARKERS =
-    ".ytp-ad-module, .ytp-ad-player-overlay, .ytp-ad-text, " +
-    ".ytp-ad-image-overlay, .ytp-ad-display-container, .video-ads, " +
-    ".ytp-ad-overlay-container, ytp-ad-module";
-
-  function getPlayerEl() {
-    return (
-      document.getElementById("movie_player") ||
-      document.querySelector("#movie_player")
-    );
-  }
-
   function inShadow(root, sel, out) {
     try {
       root.querySelectorAll(sel).forEach((n) => out.push(n));
@@ -348,6 +360,17 @@
         if (n.shadowRoot) inShadow(n.shadowRoot, sel, out);
       });
     } catch (e) {}
+  }
+
+  function isVisible(el) {
+    try {
+      if (!el || !el.isConnected) return false;
+      if (el.disabled) return false;
+      const r = el.getBoundingClientRect();
+      return r.width > 2 && r.height > 2;
+    } catch (e) {
+      return false;
+    }
   }
 
   function clickSkip() {
@@ -358,7 +381,8 @@
     let clicked = false;
     for (const el of found) {
       try {
-        if (el.offsetParent === null && !el.closest(".ytp-ad-module")) continue;
+        // somente botões REALMENTE visíveis na tela (nada de cliques fantasmas)
+        if (!isVisible(el)) continue;
         el.dispatchEvent(
           new MouseEvent("click", {
             bubbles: true,
@@ -371,70 +395,6 @@
       } catch (e) {}
     }
     return clicked;
-  }
-
-  let adSpeed = null; // { el, rate, muted }
-  function speedUpAd() {
-    const v = document.querySelector("video");
-    if (!v || adSpeed) return;
-    try {
-      adSpeed = { el: v, rate: v.playbackRate, muted: v.muted };
-      v.muted = true;
-      v.playbackRate = 16;
-    } catch (e) {
-      adSpeed = null;
-    }
-  }
-  function restoreVideo() {
-    if (!adSpeed) return;
-    const s = adSpeed;
-    adSpeed = null;
-    try {
-      if (s.el) {
-        s.el.playbackRate = s.rate || 1;
-        s.el.muted = !!s.muted;
-      }
-    } catch (e) {}
-  }
-
-  function adIsPlaying() {
-    // API oficial do player (certeza absoluta)
-    try {
-      const p = getPlayerEl();
-      if (p && typeof p.getAdState === "function" && p.getAdState() === 1) {
-        return "api";
-      }
-    } catch (e) {}
-    // Marcadores DOM de anúncio (2+ = certeza alta)
-    let hits = 0;
-    try {
-      const probe = document.querySelector(AD_DOM_MARKERS);
-      if (probe) hits += 1;
-      const v = document.querySelector("video");
-      if (v && v.duration > 0 && v.duration <= 180 &&
-          document.querySelector(".ytp-ad-module, .ytp-ad-skip-button-modern, .ytp-ad-skip-button, .ytp-skip-ad-button, .ytp-ad-text")) {
-        hits += 1;
-      }
-    } catch (e) {}
-    return hits >= 2 ? "dom" : null;
-  }
-
-  function killAd(kind) {
-    clickSkip();
-    // Salto pela API oficial: SOMENTE com certeza de anúncio E duração curta
-    if (kind === "api") {
-      try {
-        const p = getPlayerEl();
-        const v = document.querySelector("video");
-        const dur = (v && v.duration) || 0;
-        if (p && typeof p.seekTo === "function" && dur > 0 && dur <= 180) {
-          p.seekTo(Math.max(0, dur - 0.25), true);
-          return;
-        }
-      } catch (e) {}
-    }
-    // Fallback: acelera/silencia o anúncio (o conteúdo volta ao normal depois)
-    speedUpAd();
   }
 
   // ------------------------------------------------------------------
@@ -493,30 +453,17 @@
 
   // ------------------------------------------------------------------
   // 5) Ciclo principal — rápido, barato e defensivo
+  //    Somente: clique no "Pular" visível + limpeza de overlays.
+  //    O <video> NUNCA é tocado (sem seek, sem velocidade, sem mudo).
   // ------------------------------------------------------------------
   let ticks = 0;
   const TICK_MS = 700;
 
   function tick() {
     ticks++;
-    const kind = adIsPlaying();
-    if (kind) {
-      killAd(kind);
-    } else if (adSpeed) {
-      restoreVideo();
-    }
+    clickSkip();
     if (ticks % 12 === 0) cleanOverlays(); // ≈ a cada 8,4s
   }
-
-  // restaura o estado do vídeo quando o anúncio termina de fato
-  document.addEventListener("ended", restoreVideo, true);
-  document.addEventListener("durationchange", () => {
-    if (!adIsPlaying()) restoreVideo();
-  }, true);
-  window.addEventListener("blur", () => {
-    // não deixa o estado acelerado se o usuário trocar de aba durante o anúncio
-    if (!adIsPlaying()) restoreVideo();
-  });
 
   setInterval(tick, TICK_MS);
 

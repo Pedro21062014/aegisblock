@@ -877,7 +877,7 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
   function currentVer() {
     try {
       if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest) {
-        return chrome.runtime.getManifest().version || "1.5.0";
+        return chrome.runtime.getManifest().version || "1.5.1";
       }
     } catch (e) {}
     return "1.5.0";

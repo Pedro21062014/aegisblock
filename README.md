@@ -103,6 +103,19 @@ O `content/main-world.js` (v3) roda em `document_start` no mundo MAIN e
    durante o anúncio) e, por fim, aceleração silenciosa (16×, mudo) com
    restauração **exata** do estado original do vídeo
 
+### 🧪 Teste real automático (`node tools/test_shield.js`)
+
+O escudo é validado por um teste que consulta a **API real do YouTube**
+(`/player` e `/next` — resposta real de ~470 KB) e simula o DOM do player:
+
+- ✅ campos de anúncio reais removidos (`adBreakHeartbeatParams`, `adSlotRenderer`,
+  `adsEngagementPanelContentRenderer`…) — 2 itens de anúncio numa resposta real de 14.175
+- ✅ `videoDetails`, `streamingData`, `playabilityStatus` etc. preservados **byte a byte**
+- ✅ `googlevideo.com` 100% intacto (o vídeo nunca é tocado)
+- ✅ zero escritas no `<video>` (sem seek, sem velocidade, sem mudo)
+- ✅ XHR sem recursão, clique apenas no botão "Pular" **visível**
+- **24 testes · 0 falhas**
+
 **Regras de ouro (anti-falso-positivo):**
 - **Nunca** toca no vídeo de conteúdo — `googlevideo.com`/`ytimg.com` intocados, nenhum seek no conteúdo
 - **Nunca** esconde o botão "Pular anúncio" (a limpeza de overlays verifica antes)

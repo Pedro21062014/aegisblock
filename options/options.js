@@ -397,8 +397,8 @@
       .then((remote) => {
         handleUpdateState({
           latest: remote.version,
-          current: "1.5.0",
-          hasUpdate: String(remote.version) !== "1.5.0",
+          current: "1.5.1",
+          hasUpdate: String(remote.version) !== "1.5.1",
         });
       })
       .catch(() => handleUpdateState(null));
