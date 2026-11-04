@@ -23,6 +23,22 @@ EMBED = (
     + "<script>\n" + lottie_js + "\n</script>\n"
 )
 
+import base64
+
+def inline_images(html):
+    """Substitui src="...assets/icons/*.png" por data URIs (previews offline)."""
+    def repl(m):
+        p = m.group(1)
+        name = p.split("assets/icons/")[-1]
+        f = os.path.join(ROOT, "assets", "icons", name)
+        if not os.path.exists(f):
+            return m.group(0)
+        b64 = base64.b64encode(open(f, "rb").read()).decode()
+        return 'src="data:image/png;base64,' + b64 + '"'
+    return re.sub(r'src="([^"]*assets/icons/[^"]+\.png)"', repl, html)
+
+import re
+
 # ---------------- popup ----------------
 popup_html = read("popup/popup.html")
 popup_css = read("popup/popup.css")
@@ -40,6 +56,7 @@ popup_html = popup_html.replace(
     "<title>AegisBlock</title>",
     "<title>AegisBlock — Interface</title>",
 )
+popup_html = inline_images(popup_html)
 out = os.path.join(ROOT, "preview.html")
 with open(out, "w", encoding="utf-8") as f:
     f.write(popup_html)
@@ -62,6 +79,7 @@ welcome_html = welcome_html.replace(
     "<title>AegisBlock — Bem-vindo</title>",
     "<title>AegisBlock — Boas-vindas & Tour</title>",
 )
+welcome_html = inline_images(welcome_html)
 out2 = os.path.join(ROOT, "preview-welcome.html")
 with open(out2, "w", encoding="utf-8") as f:
     f.write(welcome_html)

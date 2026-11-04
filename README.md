@@ -1,7 +1,7 @@
 # 🛡️ AegisBlock — Bloqueador de Anúncios e Rastreadores
 
 <p align="center">
-  <img src="assets/icons/icon128.png" width="96" alt="AegisBlock" />
+  <img src="assets/icons/check-com-quadrado.png" width="112" alt="AegisBlock" />
 </p>
 
 <p align="center">

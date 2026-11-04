@@ -36,13 +36,15 @@
     /* topo */
     header { display: flex; align-items: center; gap: 16px; margin-bottom: 26px; }
     .logo {
-      width: 56px; height: 56px; border-radius: 17px; flex: none;
-      background: linear-gradient(150deg, #0f3d31, #0b2033 70%);
+      width: 56px; height: 56px; flex: none;
+      background: transparent;
       display: grid; place-items: center;
-      box-shadow: inset 0 0 0 1px rgba(46,230,168,0.38), inset 0 1px 0 rgba(255,255,255,0.1),
-        0 14px 32px rgba(9,40,32,0.5);
+      box-shadow: none;
     }
-    .logo svg { width: 32px; height: 32px; }
+    .logo img {
+      width: 100%; height: 100%; object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(46,230,168,0.18));
+    }
     h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; }
     h1 b {
       background: linear-gradient(95deg, var(--acc), var(--cyan));
@@ -288,9 +290,8 @@
         radial-gradient(420px 220px at 85% -20%, rgba(14,178,124,0.14), transparent 65%),
         linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
     }
-    body[data-theme="light"] .logo {
-      box-shadow: inset 0 0 0 1px rgba(14,178,124,0.4), 0 10px 24px rgba(20,60,45,0.25);
-    }
+    body[data-theme="light"] .logo { box-shadow: none; }
+    body[data-theme="light"] .logo img { filter: drop-shadow(0 8px 16px rgba(14,178,124,0.2)); }
     body[data-theme="light"] .lottie-wrap {
       background: radial-gradient(circle at 50% 40%, rgba(14,178,124,0.2), transparent 70%);
     }
@@ -321,10 +322,7 @@
   <div class="wrap">
     <header>
       <div class="logo">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L20 5.2V11c0 5.25-3.4 9.3-8 11-4.6-1.7-8-5.75-8-11V5.2L12 2z" fill="#2ee6a8" opacity="0.95"/>
-          <path d="M8.2 11.6l2.6 2.7 5-5.4" stroke="#06231a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <img src="../assets/icons/icon128.png" alt="" />
       </div>
       <div>
         <h1>Aegis<b>Block</b></h1>
@@ -491,7 +489,7 @@
     </div>
 
     <footer>
-      AegisBlock v1.5.1 · <b>230.117</b> URLs embutidas · lista remota sincronizada automaticamente<br />
+      AegisBlock v1.5.2 · <b>230.117</b> URLs embutidas · lista remota sincronizada automaticamente<br />
       Privacidade: nenhum dado sai do seu navegador. Código aberto (MIT).
     </footer>
   </div>
