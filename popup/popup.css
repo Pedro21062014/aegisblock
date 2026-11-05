@@ -1977,3 +1977,32 @@ body[data-theme="light"] .logo {
 body[data-theme="light"] .logo img {
   filter: drop-shadow(0 6px 13px rgba(14, 178, 124, 0.2));
 }
+
+
+/* =====================================================================
+   FIX v1.5.3 — cabeçalho compacto em 380px (marca não colide com botões)
+   ===================================================================== */
+.top { gap: 9px; }
+.brand .name {
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-actions { gap: 6px; }
+.theme-btn { width: 33px; height: 33px; flex: none; }
+.lang-wrap { flex: none; }
+.lang {
+  padding: 7px 16px 7px 8px;
+  font-size: 10px;
+  width: 74px;
+}
+.lang-wrap::after { right: 7px; }
+.power {
+  height: 33px;
+  padding: 0 9px;
+  font-size: 9px;
+  letter-spacing: 0.6px;
+  gap: 5px;
+}
+.power svg { width: 12px; height: 12px; }

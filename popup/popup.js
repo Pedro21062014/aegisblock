@@ -806,7 +806,7 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
     sec.hidden = false;
     document.getElementById("updateTitle").textContent = t("updateTitle");
     document.getElementById("updateSub").textContent =
-      t("updateSub").replace("{x}", "v" + (update.latest || "?"));
+      t("updateSub").replace("{x}", update.latest || "?");
     const btn = document.getElementById("updateBtn");
     if (btn && !btn.disabled) btn.textContent = t("updateBtn");
   }
@@ -877,10 +877,10 @@ ${t("malware")}: ${fmt(d.malware || 0)}`;
   function currentVer() {
     try {
       if (typeof chrome !== "undefined" && chrome.runtime && chrome.runtime.getManifest) {
-        return chrome.runtime.getManifest().version || "1.5.2";
+        return chrome.runtime.getManifest().version || "1.5.3";
       }
     } catch (e) {}
-    return "1.5.0";
+    return "1.5.3";
   }
 
   function alertDemo(msg, ms) {
